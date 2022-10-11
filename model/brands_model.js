@@ -40,10 +40,7 @@ const Brandsschema = new mongoose.Schema({
         unique:true,
         required:true
     },
-    date:{
-        type :Date,
-        default : Date.now
-    },
+    
     Brands_Ig_username:{
         type:String,
         required:true,
