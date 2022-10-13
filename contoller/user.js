@@ -256,7 +256,17 @@ router.post("/Brands_Register",(req,res)=>{
     const password=req.body.password;
     const cpassword=req.body.repassword;
     if(password==cpassword){
-        const user=new Brands_detail(req.body);
+        const user=new Brands_detail(
+            {
+                Brands_name:req.body.Brands_name,
+                email:req.body.email,
+                password:req.body.password,
+                repassword:req.body.repassword,
+                address:req.body.address,
+                phone:req.body.phone,
+                Brands_Ig_username:req.body.Brands_Ig_username
+            }
+        );
         user.save().then(()=>{
             res.status(201).send(user);
             //just need to change send to render and mention the home page
