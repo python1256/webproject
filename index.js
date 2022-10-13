@@ -1,7 +1,7 @@
-
 const express = require('express');
 const app=express();
-const port =process.env.Port || 8080;
+const PORT = process.env.PORT || 8080;
+const host='0.0.0.0';
 const nodemailer = require("nodemailer");
 const path = require("path");
 require("./db/conn");
@@ -20,8 +20,8 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 const routes = require("./contoller/user")
 app.use('/', routes)
-app.listen(port,()=>
+app.listen(PORT,host,()=>
 {
-    console.log(`listening to port at ${port}`);
+    console.log(`listening to port at ${PORT}`);
 })
 
