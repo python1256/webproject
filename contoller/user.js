@@ -1,5 +1,5 @@
 const influncer_detail = require("../model/Influencers_model");
-const Brands_detail=require("../model/brands_model");
+const Brands_detail = require("../model/brands_model");
 const express = require("express");
 const user_detail=require("../model/user_model");
 const admin_detail=require("../model/admin_model");
