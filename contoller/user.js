@@ -1,5 +1,5 @@
 const influncer_detail = require("../model/Influencers_model");
-const Brands_detail = require("../model/brands_model");
+const Brand_detail = require("../model/brands_model");
 const express = require("express");
 const user_detail=require("../model/user_model");
 const admin_detail=require("../model/admin_model");
@@ -283,7 +283,7 @@ router.post("/Brands_login",async(req,res)=>{
     try{
         const email=req.body.email;
         const password=req.body.password;
-        const user_email=await Brands_detail.findOne({email:email});
+        const user_email=await Brand_detail.findOne({email:email});
         if(user_email.password==password){
             res.status(201).send("account found");
             //just need to change send to render and then the page in double quates for routes
@@ -301,7 +301,7 @@ router.post("/Brands_login",async(req,res)=>{
 router.post("/Brands_otp_send",async(req,res)=>{
     try{
         const email=req.body.email;
-        const user_email=await Brands_detail.findOne((email));
+        const user_email=await Brand_detail.findOne((email));
         var mailoption={
             to:req.body.email,
             subject:"otp for registration is:",
@@ -358,7 +358,7 @@ router.post("/Brands_resend_otp",(req,res)=>{
 router.get("/Get_Brands_data/:id",async(req,res)=>{
     try{
         const  _id=req.params.id;
-        const Brand_data= await Brands_detail.findById(_id);
+        const Brand_data= await Brand_detail.findById(_id);
         if(!Brand_data){
             return res.status(400).send();
         }else{
@@ -373,7 +373,7 @@ router.get("/Get_Brands_data/:id",async(req,res)=>{
 
 router.get("/Get_Brands_data",async(req,res)=>{
     try{
-       const Brands_data =await Brands_detail.find();
+       const Brands_data =await Brand_detail.find();
        res.send(Brands_data);
 
     }catch(err)
