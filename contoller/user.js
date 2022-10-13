@@ -256,7 +256,7 @@ router.post("/Brands_Register",(req,res)=>{
     const password=req.body.password;
     const cpassword=req.body.repassword;
     if(password==cpassword){
-        const user=new Brands_detail(
+        const user=new Brand_detail(
             {
                 Brands_name:req.body.Brands_name,
                 email:req.body.email,
