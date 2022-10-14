@@ -142,7 +142,7 @@ let transporter=nodemailer.createTransport({
     secure:true,
     auth:{
         user:'parthchaturvedi.wfa@gmail.com',
-        pass:'zwzyjhyihybmhiya',
+        pass:'czwemtfkvffrzrmf',
     }
 });
 //declaring global otp variable
