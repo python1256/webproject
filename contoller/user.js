@@ -142,7 +142,7 @@ let transporter=nodemailer.createTransport({
     secure:true,
     auth:{
         user:'parthchaturvedi.wfa@gmail.com',
-        pass:'czwemtfkvffrzrmf',
+        pass:'celtyipiocrltazg',
     }
 });
 //declaring global otp variable
@@ -159,7 +159,7 @@ router.post("/Influencer_otp_send/:email",async(req,res)=>{
         let mailoption={
             from:'parthchaturvedi.wfa@gmail.com',
             to:gmailb,
-            subject:"otp for registration is:",
+            subject:'otp for registration is:',
             html:`<h3>otp for account verification is</h3>${otp}`
         };
         console.log(mailoption);
