@@ -1,8 +1,10 @@
 const influncer_detail = require("../model/Influencers_model");
 const Brand_detail = require("../model/brands_model");
 const express = require("express");
+require("dotenv").config();
 const user_detail=require("../model/user_model");
 const admin_detail=require("../model/admin_model");
+const fast2sms = require('fast-two-sms');
 const bodyparser=require("body-parser");
 const nodemailer=require("nodemailer");
 const { error } = require("console");
@@ -148,8 +150,20 @@ let transporter=nodemailer.createTransport({
 //declaring global otp variable
 var otp=`${Math.floor(1000 +Math.random()*9000)}`;
 
+//two step authentication api
 
-//two step authentication api 
+router.post("/send_Message",async(req,res)=>{
+    const influencer_number=influncer_detail.findOne({phone:req.body.phone});
+    const msg=`your otp is ${otp}`;
+    const send_sms=influencer_number.phone;
+    var options = {authorization : process.env.API_KEY, message : msg ,  numbers : ['9999999999','8888888888']} 
+    const response = await fast2sms.sendMessage(options)
+    console.log(response)
+})
+
+
+
+//two step for email 
 router.post("/Influencer_otp_send/:email",async(req,res)=>{
     try{
         const user_email=await influncer_detail.findOne({email:req.params.email});
@@ -388,5 +402,4 @@ router.get("/Get_Brands_data",async(req,res)=>{
         res.send(err);
     }
 })
-
 module.exports = router;
