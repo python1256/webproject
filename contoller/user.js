@@ -159,6 +159,7 @@ router.post("/send_Message/:phone",async(req,res)=>{
         //console.log(influencer_number);
         console.log(msg);
         const send_sms=req.params.phone;
+        console.log(send_sms);
         const response =awaitfast2sms.sendMessage({authorization :IbHEs8QSMlxeU9g3GFtYaPBujpkWRA54dX7y1rDJh0VimvnOqwdopsCZ4lu0RYkJ2cBwKLnrNmMtH68z, message : msg ,  number:[send_sms]}); 
         res.send(response);
         console.log(response);
