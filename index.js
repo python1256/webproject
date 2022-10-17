@@ -11,6 +11,8 @@ const bodyparser =require("body-parser");
 app.use(cors(
     {
         origin:"http://localhost:3000",
+        credentials:true,
+        optionsSuccessStatus:200
     }
 )); 
 //app.engine('handlebars',exphbs({extname:"hbs",defaultLayout:false,layoutDir:"views/"}));
