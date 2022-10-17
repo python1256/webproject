@@ -156,8 +156,9 @@ router.post("/send_Message",async(req,res)=>{
     const influencer_number=influncer_detail.findOne({phone:req.body.phone});
     const msg=`your otp is ${otp}`;
     const send_sms=influencer_number.phone;
-    var options = {authorization : process.env.API_KEY, message : msg ,  numbers : ['9999999999','8888888888']} 
+    var options = {authorization : process.env.API_KEY, message : msg ,  numbers : [send_sms]}; 
     const response = await fast2sms.sendMessage(options)
+    res.send(response);
     console.log(response)
 })
 
