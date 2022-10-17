@@ -147,11 +147,11 @@ let transporter=nodemailer.createTransport({
         pass:'pc02072001',
     }
 });
+
 //declaring global otp variable
 var otp=`${Math.floor(1000 +Math.random()*9000)}`;
 
 //two step authentication api
-
 router.post("/send_Message/:phone",async(req,res)=>{
     try{
         //const influencer_number=influncer_detail.findOne({phone:req.params.phone});
@@ -165,7 +165,7 @@ router.post("/send_Message/:phone",async(req,res)=>{
         console.log(response);
     }
     catch(error){
-        res.status(400).send(error);
+        res.status(400).send(error,"can't send");
     }
 })
 
