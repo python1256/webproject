@@ -13,6 +13,7 @@
   "author": "paru_boss",
   "license": "ISC",
   "dependencies": {
+    "@vonage/server-sdk": "^2.11.2",
     "apollo-server-express": "^3.10.3",
     "axios": "^1.1.2",
     "body-parser": "^1.20.0",
@@ -26,10 +27,12 @@
     "https": "^1.0.0",
     "mongodb": "^4.10.0",
     "mongoose": "^6.6.3",
+    "nexmo": "^2.9.1",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.20",
     "plivo": "^4.34.1",
+    "puretext": "^0.1.5",
     "request": "^2.88.2",
     "sinch-request": "^0.0.8",
     "validator": "^13.7.0"
