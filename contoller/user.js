@@ -153,13 +153,20 @@ var otp=`${Math.floor(1000 +Math.random()*9000)}`;
 //two step authentication api
 
 router.post("/send_Message",async(req,res)=>{
-    const influencer_number=influncer_detail.findOne({phone:req.body.phone});
-    const msg=`your otp is ${otp}`;
-    const send_sms=influencer_number.phone;
-    var options = {authorization : process.env.API_KEY, message : msg ,  numbers : [send_sms]}; 
-    const response = await fast2sms.sendMessage(options)
-    res.send(response);
-    console.log(response)
+    try{
+        const influencer_number =await influncer_detail.findOne({phone:req.body.phone});
+        const msg=`your otp is ${otp}`;
+        console.log(influencer_number);
+        console.log(msg);
+        const send_sms=influencer_number.phone;
+        var options = {authorization : process.env.API_KEY, message : msg ,  numbers : [send_sms]}; 
+        const response = await fast2sms.sendMessage(options);
+        res.send(response);
+        console.log(response);
+    }
+    catch(error){
+        res.status(400).send(error);
+    }
 })
 
 
