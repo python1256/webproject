@@ -8,7 +8,11 @@ const path = require("path");
 require("./db/conn");
 const exphbs = require("express-handlebars");
 const bodyparser =require("body-parser");
-app.use(cors()); 
+app.use(cors(
+    {
+        origin:"http://localhost:3000",
+    }
+)); 
 //app.engine('handlebars',exphbs({extname:"hbs",defaultLayout:false,layoutDir:"views/"}));
 app.set('veiw engine','handlebars');
 
