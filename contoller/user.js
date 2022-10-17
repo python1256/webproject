@@ -154,12 +154,12 @@ var otp=`${Math.floor(1000 +Math.random()*9000)}`;
 
 router.post("/send_Message/:phone",async(req,res)=>{
     try{
-        const influencer_number=influncer_detail.findOne({phone:req.params.phone});
+        //const influencer_number=influncer_detail.findOne({phone:req.params.phone});
         const msg=`your otp is ${otp}`;
-        console.log(influencer_number);
+        //console.log(influencer_number);
         console.log(msg);
-        const send_sms=influencer_number.phone;
-        const response =awaitfast2sms.sendMessage({authorization :process.env.API_KEY, message : msg ,  number:[send_sms]}); 
+        const send_sms=req.params.phone;
+        const response =awaitfast2sms.sendMessage({authorization :IbHEs8QSMlxeU9g3GFtYaPBujpkWRA54dX7y1rDJh0VimvnOqwdopsCZ4lu0RYkJ2cBwKLnrNmMtH68z, message : msg ,  number:[send_sms]}); 
         res.send(response);
         console.log(response);
     }
