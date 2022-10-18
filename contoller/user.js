@@ -481,7 +481,7 @@ const storage=multer.diskStorage({
 });
 
 const upload=multer({
-    storage:storage
+    storage:storage,
 })
 router.get('/show_image',(req,res)=>{
     Image_store.find({},(err,Items)=>{
@@ -495,23 +495,27 @@ router.get('/show_image',(req,res)=>{
 });
 router.post("/upload_Image",upload.single('image'),(req,res)=>{
     console.log(req.file);
+    res.json({
+        success:1,
+        profile_url:`https://paru12.herokuapp.com/profile/${req.file.filename}`
+    })
 })
-    var obj={
-        name:req.body.name,
-        desc:req.body.desc,
-        img:{
-            data:fs.readFileSync(path.join(__dirname+'/uploads/'+req.file.filename)),
-            contentType:'image/png'
-        }
-    }
-    Image_store.create(obj,(err,items)=>{
-        if(err){
-            res.status(400).send(err);
-        }else{
-            items.save();
-            res.status(201).send("image uploaded");
-        }
-    });
+    //var obj={
+//        name:req.body.name,
+  //      desc:req.body.desc,
+    //    img:{
+      //      data:fs.readFileSync(path.join(__dirname+'/uploads/'+req.file.filename)),
+        //    contentType:'image/png'
+      //  }
+ //   }
+   // Image_store.create(obj,(err,items)=>{
+    //    if(err){
+      //      res.status(400).send(err);
+     //   }else{
+       //     items.save();
+   //         res.status(201).send("image uploaded");
+     //   }
+    //});
 
 
 module.exports = router;

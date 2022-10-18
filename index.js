@@ -18,7 +18,7 @@ app.use(cors(
 //app.engine('handlebars',exphbs({extname:"hbs",defaultLayout:false,layoutDir:"views/"}));
 app.set('veiw engine','handlebars');
 
-
+app.use('/image',express.static('upload/images'));
 
 //calling
 
