@@ -5,8 +5,10 @@ const express = require("express");
 require("dotenv").config();
 const user_detail=require("../model/user_model");
 const admin_detail=require("../model/admin_model");
-import { cron } from "node-cron";
-import instaCacheCron from "./crons/instaCache.cron";
+const fs = require('fs');
+const path =require("path");
+const  cron= require("node-cron");
+const  instaCacheCron=require("./crons/instaCache.cron");
 const request=require("request");
 const fast2sms = require('fast-two-sms');
 const bodyparser=require("body-parser");
@@ -14,6 +16,9 @@ const nodemailer=require("nodemailer");
 const { error } = require("console");
 const app=express();
 const router = express.Router();
+///setting up it
+var Image_store=require("../model/image_model");
+var multer=require('multer');
 
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
@@ -54,6 +59,7 @@ router.get("/get_shot_access_token",async(req,res)=>{
         let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTA_APP_SECRET}&access_token=${accessToken}`)
         accessToken = resp.data.access_token;
         const saveit=new Access_token({short_access_token:accessToken});
+        console.log(saveit);
         saveit.save();
       } catch (e) {
         console.log("Error=====", e.data);
@@ -84,6 +90,7 @@ router.get("/long_access_token",async(req,res)=>{
             let newAccessToken = resp.data.access_token;
             let saveit=new Access_token({long_access_token:newAccessToken});
             saveit.save();
+            res.send(saveit);
         }
     } catch (e) {
         console.log("Error=====", e.response.data);
@@ -466,4 +473,43 @@ router.get("/Get_Brands_data",async(req,res)=>{
         res.send(err);
     }
 })
+//set up multer
+var storage=multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,'uploads')
+    },
+    filename:(req,file,cb)=>{
+        cb(null,file.fieldname+'-'+Data.now())
+    }
+});
+var uploads=multer({storage:storage});
+router.get('/show_image',(req,res)=>{
+    Image_store.find({},(err,Items)=>{
+        if(err){
+            console.log(err);
+            res.status(400).send('an error');
+        }else{
+            res.render({Items:Items});
+        }
+    });
+});
+router.post("/upload_Image",uploads.single('image'),(req,res,next)=>{
+    var obj={
+        name:req.body.name,
+        desc:req.body.desc,
+        img:{
+            data:fs.readFileSync(path.join(__dirname+'/uploads/'+req.file.filename)),
+            contentType:'image/png'
+        }
+    }
+    Image_store.create(obj,(err,items)=>{
+        if(err){
+            res.status(400).send(err);
+        }else{
+            items.save();
+            res.status(201).send("image uploaded");
+        }
+    });
+});
+
 module.exports = router;
