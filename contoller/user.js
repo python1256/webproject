@@ -48,6 +48,15 @@ router.get('/show_image',(req,res)=>{
         }
     });
 })
+router.get("/show_by_id/:id",async(req,res)=>{
+    try{
+        const Id=req.params.id;
+        const foundimage=await Image_store.findOne({id:Id});
+        res.status(201).send(foundimage);
+    } catch(err){
+        res.status(400).send(err);
+    }
+})
 
 router.post("/upload_Image",(req,res)=>{
     console.log("hello");
