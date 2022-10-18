@@ -1,4 +1,4 @@
-const mongoose=request("mongoose");
+const mongoose=require("mongoose");
 const Access_tokenschema = new mongoose.Schema({
     short_access_token: {type:String},
     long_access_token:{type:String},

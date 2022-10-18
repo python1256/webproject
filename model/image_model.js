@@ -1,4 +1,4 @@
-const mongoose=request("mongoose");
+const mongoose=require("mongoose");
 const Imageschema = new mongoose.Schema({
    name:String,
    desc:String,
