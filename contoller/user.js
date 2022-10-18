@@ -224,8 +224,8 @@ let transporter=nodemailer.createTransport({
     port:465,
     secure:true,
     auth:{
-        user:'parthchaturvedi.wfa@gmail.com',
-        pass:'pc02072001',
+        user:'bdm2.wfa',
+        pass:'qwerty@2023A',
     }
 });
 
