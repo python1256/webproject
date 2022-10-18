@@ -18,7 +18,6 @@ const { error } = require("console");
 const app=express();
 const router = express.Router();
 const Image_store=require("../model/image_model");
-const { ifError } = require("assert");
 
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
