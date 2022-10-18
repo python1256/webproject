@@ -51,6 +51,7 @@ router.get('/show_image',(req,res)=>{
 router.get("/show_by_id/:id",async(req,res)=>{
     try{
         const Id=req.params.id;
+        console.log(Id);
         const foundimage=await Image_store.findOne({id:Id});
         res.status(201).send(foundimage);
     } catch(err){
