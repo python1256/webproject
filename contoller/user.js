@@ -6,7 +6,7 @@ require("dotenv").config();
 const user_detail=require("../model/user_model");
 const admin_detail=require("../model/admin_model");
 import { cron } from "node-cron";
-import instaCacheCron from "./crons/instaCacheCron.cron";
+import instaCacheCron from "./crons/instaCache.cron";
 const request=require("request");
 const fast2sms = require('fast-two-sms');
 const bodyparser=require("body-parser");
@@ -89,7 +89,11 @@ router.get("/long_access_token",async(req,res)=>{
         console.log("Error=====", e.response.data);
     }
 })
- //user login and register
+
+//
+
+  //user login and register
+
 router.post("/users_Register",(req,res)=>{
     console.log(req.body);
 
