@@ -1,24 +1,95 @@
 const influncer_detail = require("../model/Influencers_model");
 const Brand_detail = require("../model/brands_model");
+const Access_token=require("../model/Access_token");
 const express = require("express");
 require("dotenv").config();
 const user_detail=require("../model/user_model");
 const admin_detail=require("../model/admin_model");
+import { cron } from "node-cron";
+import instaCacheCron from "./crons/instaCacheCron.cron";
+const request=require("request");
 const fast2sms = require('fast-two-sms');
 const bodyparser=require("body-parser");
 const nodemailer=require("nodemailer");
 const { error } = require("console");
 const app=express();
 const router = express.Router();
-//const smtpconnection= require("nodemailer/lib/smtp-connection");
+
+//redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
     return res.send(
       `<a href='https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=user_media,user_profile&response_type=code'> Connect to Instagram </a>`
     );
   });
 
-//user login and register
+//data from backend
+let code = req.body.code;
+let redirectUri = req.body.redirectUri;
 
+let accessToken = null;
+try {
+
+    // send form based request to Instagram API
+    let result = await request.post({
+        url: 'https://api.instagram.com/oauth/access_token',
+        form: {
+            client_id: process.env.INSTA_APP_ID,
+            client_secret: process.env.INSTA_APP_SECRET,
+            grant_type: 'authorization_code',
+            redirect_uri: req.body.redirectUri,
+            code: req.body.code
+        }
+    });
+
+    // Got access token. Parse string response to JSON
+    accessToken = JSON.parse(result).access_token;
+} catch (e) {
+    console.log("Error=====", e);
+}
+
+//get short lived access token
+
+router.get("/get_shot_access_token",async(req,res)=>{
+    try {
+        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTA_APP_SECRET}&access_token=${accessToken}`)
+        accessToken = resp.data.access_token;
+        const saveit=new Access_token({short_access_token:accessToken});
+        saveit.save();
+      } catch (e) {
+        console.log("Error=====", e.data);
+      }
+})
+
+
+// run immediately after server starts
+instaRefreshCron();
+
+// refresh instaAccessToken eg: weekly(every Sat)
+cron.schedule('* * * * * 7', async () => {
+    await instaRefreshCron();
+});
+
+// update instaPhotos Cache every 3 hours
+cron.schedule('0 0 */3 * * *', async () => {
+    // this method fetches updated Insta images and saves to DB.
+      await instaCacheCron();
+  });
+
+//get log lived access token
+router.get("/long_access_token",async(req,res)=>{
+    try {
+        let oldAccessToken = Access_token.short_access_token; // get from DB
+        let resp = await axios.get(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${oldAccessToken}`)
+        if (resp.data.access_token) {
+            let newAccessToken = resp.data.access_token;
+            let saveit=new Access_token({long_access_token:newAccessToken});
+            saveit.save();
+        }
+    } catch (e) {
+        console.log("Error=====", e.response.data);
+    }
+})
+ //user login and register
 router.post("/users_Register",(req,res)=>{
     console.log(req.body);
 
@@ -152,25 +223,6 @@ let transporter=nodemailer.createTransport({
 var otp=`${Math.floor(1000 +Math.random()*9000)}`;
 
 //two step authentication api
-router.post("/send_Message/:phone",async(req,res)=>{
-    try{
-        //const influencer_number=influncer_detail.findOne({phone:req.params.phone});
-        const msg=`your otp is ${otp}`;
-        //console.log(influencer_number);
-        console.log(msg);
-        //const send_sms=req.params.phone;
-        //console.log(send_sms);
-        const response =awaitfast2sms.sendMessage({authorization :IbHEs8QSMlxeU9g3GFtYaPBujpkWRA54dX7y1rDJh0VimvnOqwdopsCZ4lu0RYkJ2cBwKLnrNmMtH68z, message : msg ,  number:[req.params.phone]}); 
-        res.send(response);
-        console.log(response);
-    }
-    catch(error){
-        res.status(400).send(error,"can't send");
-    }
-})
-
-
-
 //two step for email 
 router.post("/Influencer_otp_send/:email",async(req,res)=>{
     try{
