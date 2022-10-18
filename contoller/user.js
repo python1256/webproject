@@ -492,7 +492,8 @@ router.get('/show_image',(req,res)=>{
             res.render({Items:Items});
         }
     });
-});
+})
+
 router.post("/upload_Image",upload.single('image'),(req,res)=>{
     console.log(req.file);
     res.json({
