@@ -1,6 +1,6 @@
 const influncer_detail = require("../model/Influencers_model");
 const Brand_detail = require("../model/brands_model");
-const Access_token=require("../model/Access_token");
+const Access_token=require("../model/Access_Token");
 const express = require("express");
 require("dotenv").config();
 const user_detail=require("../model/user_model");
