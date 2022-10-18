@@ -224,8 +224,8 @@ let transporter=nodemailer.createTransport({
     port:465,
     secure:true,
     auth:{
-        user:'bdm2.wfa',
-        pass:'qwerty@2023A',
+        user:'qwerty@2023A',
+        pass:'bdm2.wfa',
     }
 });
 
@@ -241,7 +241,7 @@ router.post("/Influencer_otp_send/:email",async(req,res)=>{
         const gmailb = user_email.email;
         console.log(gmailb);
         let mailoption={
-            from:'parthchaturvedi.wfa@gmail.com',
+            from:'qwerty@2023A',
             to:gmailb,
             subject:'otp for registration is:',
             html:`<h3>otp for account verification is</h3>${otp}`
