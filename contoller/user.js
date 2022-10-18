@@ -18,6 +18,7 @@ const app=express();
 const router = express.Router();
 const Image_store=require("../model/image_model");
 const multer = require("multer");
+const { ifError } = require("assert");
 
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
@@ -26,6 +27,51 @@ router.get("/get-auth-code", (req, res, next) => {
     );
   });
 
+//set up multer
+const Storage=multer.diskStorage({
+    destination:'uploads',
+    filename:(req,file,cb)=>{
+       cb(null,file.originalname);
+    },
+});
+
+const upload=multer({
+    storage:Storage,
+}).single('image')
+router.get('/show_image',(req,res)=>{
+    Image_store.find({},(err,Items)=>{
+        if(err){
+            console.log(err);
+            res.status(400).send('an error');
+        }else{
+            res.send({Items:Items});
+        }
+    });
+})
+
+router.post("/upload_Image",(req,res)=>{
+    upload(req,res,(err)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            const newimage=new Image_store({
+                name:req.body.name,
+                image:{
+                    date:req.file.filename,
+                    contentType:'image/png'
+                } 
+            })
+            newimage.save().then(()=>{
+                res.status(201).send("sucessfully upload");
+                //just need to change send to render and mention the home page
+            }).catch((err)=>{
+            res.status(400).send(err);
+            })
+        }
+    })
+})
+   
 //data from backend
 //let code = req.body.code;
 //let redirectUri = req.body.redirectUri;
@@ -472,35 +518,7 @@ router.get("/Get_Brands_data",async(req,res)=>{
         res.send(err);
     }
 })
-//set up multer
-const storage=multer.diskStorage({
-    destination:'./uploads/images',
-    filename:(req,file,cb)=>{
-       return cb(null,`${file.fieldname}_${Data.now()}${path.extname(file.originalname)}`);
-    }
-});
 
-const upload=multer({
-    storage:storage,
-});
-router.get('/show_image',(req,res)=>{
-    Image_store.find({},(err,Items)=>{
-        if(err){
-            console.log(err);
-            res.status(400).send('an error');
-        }else{
-            res.render({Items:Items});
-        }
-    });
-})
-
-router.post("/upload_Image",upload.single('image'),(req,res)=>{
-    console.log(req.file);
-    res.json({
-        success:1,
-        profile_url:`https://paru12.herokuapp.com/profile/${req.file.filename}`
-    })
-})
     //var obj={
 //        name:req.body.name,
   //      desc:req.body.desc,
