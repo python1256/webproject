@@ -37,7 +37,7 @@ const Storage=multer.diskStorage({
 
 const upload=multer({
     storage:Storage,
-}).single('image');
+}).single('testimage');
 
 router.get('/show_image',(req,res)=>{
     Image_store.find({},(err,Items)=>{
@@ -54,7 +54,7 @@ router.post("/upload_Image",(req,res)=>{
     console.log("hello");
     upload(req,res,(err)=>{
         if(err){
-            console.log(err);
+            console.log(err,"error");
         }
         else{
             const newimage=new Image_store({
