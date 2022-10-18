@@ -13,11 +13,11 @@ const request=require("request");
 const fast2sms = require('fast-two-sms');
 const bodyparser=require("body-parser");
 const nodemailer=require("nodemailer");
+const multer = require('multer');
 const { error } = require("console");
 const app=express();
 const router = express.Router();
 const Image_store=require("../model/image_model");
-const multer = require("multer");
 const { ifError } = require("assert");
 
 //redirecting the auth code
