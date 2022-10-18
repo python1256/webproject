@@ -473,14 +473,13 @@ router.get("/Get_Brands_data",async(req,res)=>{
     }
 })
 //set up multer
-var storage=multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,'uploads')
-    },
+const storage=multer.diskStorage({
+    destination:"../uploads/images",
     filename:(req,file,cb)=>{
-        cb(null,file.fieldname+'-'+Data.now())
+       return cb(null,`${file.fieldname}_${Data.now()}${path.extname(file.originalname)}`);
     }
 });
+
 var uploads=multer({storage:storage});
 router.get('/show_image',(req,res)=>{
     Image_store.find({},(err,Items)=>{
