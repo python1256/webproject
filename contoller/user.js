@@ -17,7 +17,7 @@ const { error } = require("console");
 const app=express();
 const router = express.Router();
 const Image_store=require("../model/image_model");
-const multer=require('multer');
+const multer = require("multer");
 
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
@@ -474,13 +474,15 @@ router.get("/Get_Brands_data",async(req,res)=>{
 })
 //set up multer
 const storage=multer.diskStorage({
-    destination:"../uploads/images",
+    destination:'./uploads/images',
     filename:(req,file,cb)=>{
        return cb(null,`${file.fieldname}_${Data.now()}${path.extname(file.originalname)}`);
     }
 });
 
-var uploads=multer({storage:storage});
+const upload=multer({
+    storage:storage
+})
 router.get('/show_image',(req,res)=>{
     Image_store.find({},(err,Items)=>{
         if(err){
@@ -491,7 +493,9 @@ router.get('/show_image',(req,res)=>{
         }
     });
 });
-router.post("/upload_Image",uploads.single('image'),(req,res,next)=>{
+router.post("/upload_Image",upload.single('image'),(req,res)=>{
+    console.log(req.file);
+})
     var obj={
         name:req.body.name,
         desc:req.body.desc,
@@ -508,6 +512,6 @@ router.post("/upload_Image",uploads.single('image'),(req,res,next)=>{
             res.status(201).send("image uploaded");
         }
     });
-});
+
 
 module.exports = router;
