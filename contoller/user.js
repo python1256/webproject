@@ -37,7 +37,8 @@ const Storage=multer.diskStorage({
 
 const upload=multer({
     storage:Storage,
-}).single('image')
+}).single('image');
+
 router.get('/show_image',(req,res)=>{
     Image_store.find({},(err,Items)=>{
         if(err){
@@ -50,6 +51,7 @@ router.get('/show_image',(req,res)=>{
 })
 
 router.post("/upload_Image",(req,res)=>{
+    console.log("hello");
     upload(req,res,(err)=>{
         if(err){
             console.log(err);
@@ -61,7 +63,9 @@ router.post("/upload_Image",(req,res)=>{
                     date:req.file.filename,
                     contentType:'image/png'
                 } 
+
             })
+            console.log(newimage);
             newimage.save().then(()=>{
                 res.status(201).send("sucessfully upload");
                 //just need to change send to render and mention the home page
