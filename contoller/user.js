@@ -482,7 +482,7 @@ const storage=multer.diskStorage({
 
 const upload=multer({
     storage:storage,
-})
+});
 router.get('/show_image',(req,res)=>{
     Image_store.find({},(err,Items)=>{
         if(err){
