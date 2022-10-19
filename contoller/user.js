@@ -84,6 +84,19 @@ router.post("/upload_Image",(req,res)=>{
         }
     })
 })
+
+router.delete("remover_influencer/:id",async(req,res)=>{
+    try{
+        const deleteid=await influncer_detail.findByIdAndDelete({id:req.params.id});
+        if(!req.params.id){
+            return res.status(400).send(err);
+        }
+        res.send(deleteid);
+    }catch(err){
+        res.status(500).send("cannot delete",err);
+    }
+
+})
    
 //data from backend
 //let code = req.body.code;
