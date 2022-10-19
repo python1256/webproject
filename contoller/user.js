@@ -83,7 +83,7 @@ router.post("/upload_Image",(req,res)=>{
             })
         }
     })
-})
+});
 ///delete influencer
 router.delete("/remover_influencer/:id",async(req,res)=>{
     try{
@@ -96,7 +96,7 @@ router.delete("/remover_influencer/:id",async(req,res)=>{
         res.status(500).send("cannot delete",err);
     }
 
-})
+});
 
 
 //delete brands
@@ -111,7 +111,7 @@ router.delete("/remover_Brand/:id",async(req,res)=>{
         res.status(500).send("cannot delete",err);
     }
 
-})
+});
 
    
 //data from backend
