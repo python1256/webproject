@@ -87,7 +87,7 @@ router.post("/upload_Image",(req,res)=>{
 ///delete influencer
 router.delete("/remover_influencer/:id",async(req,res)=>{
     try{
-        const deleteid=await influncer_detail.findByIdAndDelete({id:req.params.id});
+        const deleteid=await influncer_detail.findByIdAndDelete(req.params.id);
         if(!req.params.id){
             return res.status(400).send(err);
         }
@@ -102,7 +102,7 @@ router.delete("/remover_influencer/:id",async(req,res)=>{
 //delete brands
 router.delete("/remover_Brand/:id",async(req,res)=>{
     try{
-        const deleteid=await Brand_detail.findByIdAndDelete({id:req.params.id});
+        const deleteid=await Brand_detail.findByIdAndDelete(req.params.id);
         if(!req.params.id){
             return res.status(400).send(err);
         }
@@ -111,7 +111,7 @@ router.delete("/remover_Brand/:id",async(req,res)=>{
         res.status(500).send("cannot delete",err);
     }
 
-});
+})
 
    
 //data from backend
