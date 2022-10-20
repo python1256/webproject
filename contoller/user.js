@@ -18,6 +18,17 @@ const { error } = require("console");
 const app=express();
 const router = express.Router();
 const Image_store=require("../model/image_model");
+const jwt=require("jsonwebtoken");
+
+
+//creating jsonweb token
+//const createToken=async async=>{
+  //  const tokeN = await jwt.sign({ _id:"6351306e43ef133b457210d0"},"chfnfjfjnjhnjfbdnkjmndnjmsjddftg");
+    //console.log(tokeN);
+    //const userv=await jwt.verify(token,"chfnfjfjnjhnjfbdnkjmndnjmsjddftg")
+  //  console.log(userv);
+//}
+//createToken();
 
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
@@ -188,7 +199,7 @@ router.delete("/remover_Brand/:id",async(req,res)=>{
 
   //user login and register
 
-router.post("/users_Register",(req,res)=>{
+router.post("/users_Register",async (req,res)=>{
     console.log(req.body);
 
     const password = req.body.password;
@@ -201,17 +212,16 @@ router.post("/users_Register",(req,res)=>{
             repassword:req.body.repassword,
             phone:req.body.phone
         });
-        console.log(user);
-        user.save().then(()=>{
-            res.status(201).send(user);
+        const token=await user.generateAuthToken();
+        console.log(token);
+        const register= await user.save();
+        console.log("the page part"+register);
+        res.status(201).send(user);
             //just need to change send to render and mention the home page
-        }).catch((err)=>{
-        res.status(400).send(err);
-        })
-    }else{
+        }
+        else{
         res.send("password is not matching");
     }
-   
 });
 
 router.post("/user_login",async(req,res)=>{

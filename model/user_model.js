@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator=require('validator');
+const jwt=require("jsonwebtoken");
+
 const userschema = new mongoose.Schema({
     user_name:{
         type : String,
@@ -34,9 +36,29 @@ const userschema = new mongoose.Schema({
         minlength:10,
         unique:true,
         required:true
-    }
+    },
+    tokens:[{
+        token:{
+            type:String,
+            required:true
+        }
+    }]
     
 })
+
+userschema.methods.generateAuthToken=async()=>{
+    try{
+    const paru = await jwt.sign({ _id:this._id},process.env.SECRET_FOR_TOKEN);
+    this.tokens=this.tokens.concat({token:paru})
+    await this.save();
+    console.log(token);
+    return token;
+    }catch(error){
+        res.send(error);
+        console.log(err);
+    }
+}
+
 
 
 const users_detail=new mongoose.model('users_detail',userschema);
