@@ -19,7 +19,7 @@ const app=express();
 const router = express.Router();
 const Image_store=require("../model/image_model");
 const jwt=require("jsonwebtoken");
-
+const bcrypt=require("bcryptjs");
 
 //creating jsonweb token
 //const createToken=async async=>{
@@ -29,7 +29,12 @@ const jwt=require("jsonwebtoken");
   //  console.log(userv);
 //}
 //createToken();
+//creating bcrypt hash and compare
+//const securePassword =async(password)=>{
+  //  const passwordhash=await bcrypt.hash(password,10);
+   // const passwordmatch=await bcrypt.compare(password,passwordhash)
 
+//}
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
     return res.send(
@@ -212,10 +217,17 @@ router.post("/users_Register",async (req,res)=>{
             repassword:req.body.repassword,
             phone:req.body.phone
         });
+        //saving password
+       // middleware
         const token=await user.generateAuthToken();
         console.log(token);
+        res.cookie("jwt",token,{
+            expires:new Date(date.now()+30000),
+            httpOnly:true
+        });
+        console.log(cookie);
         const register= await user.save();
-        console.log("the page part"+register);
+        console.log("the page part" + register);
         res.status(201).send(user);
             //just need to change send to render and mention the home page
         }
@@ -229,11 +241,21 @@ router.post("/user_login",async(req,res)=>{
         const email=req.body.email;
         const password=req.body.password;
         const user_email=await user_detail.findOne({email:email});
-        if(user_email.password==password){
-            res.status(201).send("account found");
+        const ismatch=bcrypt.compare(password,user_email.password);
+        const token=await user_email.generateAuthToken();
+        console.log(token);
+        res.cookie("jwt",token,{
+            expires:new Date(date.now()+600000),
+            httpOnly:true,
+            secure:true
+        });
+        console.log(`this is ${req.cookies.jwt}`);
+
+        if(!ismatch){
+            res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.send("invalid login credentials");
+            res.status(201).send("your token:"+token);
         }
 
     }catch(err){

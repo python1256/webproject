@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator=require('validator');
 const jwt=require("jsonwebtoken");
-
+const bcrypt=require("bcryptjs");
 const userschema = new mongoose.Schema({
     user_name:{
         type : String,
@@ -59,7 +59,14 @@ userschema.methods.generateAuthToken=async()=>{
     }
 }
 
-
+userschema.pre("save",async function(next){
+    if(this.isModified("password")){
+        const passwordhash= await bcrypt.hash(password,10);
+        this.password= await bcrypt.hash(this.password,10);
+        this.repassword=undefined;
+    }
+    next();
+})
 
 const users_detail=new mongoose.model('users_detail',userschema);
 

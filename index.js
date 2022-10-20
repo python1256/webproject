@@ -8,6 +8,8 @@ const path = require("path");
 require("./db/conn");
 const exphbs = require("express-handlebars");
 const bodyparser =require("body-parser");
+const cookieparser=require("cookie-parser");
+const auth=require("./middleware/auth");
 app.use(cors(
     {
         origin:"http://localhost:3000",
@@ -15,6 +17,7 @@ app.use(cors(
         optionsSuccessStatus:200
     }
 )); 
+app.use(cookieparser());
 //app.engine('handlebars',exphbs({extname:"hbs",defaultLayout:false,layoutDir:"views/"}));
 app.set('veiw engine','handlebars');
 
