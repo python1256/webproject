@@ -390,11 +390,11 @@ router.post("/Influencer_login",async(req,res)=>{
             res.status(201).send("account found");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.send("invalid login credentials");
+            res.send("invalid password!!");
         }
 
     }catch(err){
-        res.status(400).send("invalid data entry");
+        res.status(400).send("invalid email!!");
     }
 })
 
@@ -467,11 +467,11 @@ router.post("/Brands_login",async(req,res)=>{
             res.status(201).send("account found");
             //just need to change send to render and then the page in double quates for routes
         }else{
-            res.send("invalid login credentials");
+            res.send("invalid password!!");
         }
 
     }catch(err){
-        res.status(400).send("invalid data input");
+        res.status(400).send("invalid email!!");
     }
 })
 
