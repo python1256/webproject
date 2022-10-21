@@ -228,7 +228,7 @@ router.post("/users_Register",async (req,res)=>{
         //console.log(cookie);
         const register= await user.save();
         console.log("the page part" + register);
-        res.status(201).send(user);
+        res.status(201).send(register);
             //just need to change send to render and mention the home page
         }
         else{
@@ -255,7 +255,7 @@ router.post("/user_login",async(req,res)=>{
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send("your token:"+token);
+            res.status(201).send(user_email.token);
         }
 
     }catch(err){
@@ -313,7 +313,7 @@ router.post("/Admin_login",async(req,res)=>{
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send(token);
+            res.status(201).send(user_email.tokens);
         }
 
     }catch(err){
@@ -448,7 +448,7 @@ router.post("/Influencer_login",async(req,res)=>{
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send("your token:"+token);
+            res.status(201).send("your token:"+user_email.tokens);
         }
 
     }catch(err){
@@ -538,7 +538,7 @@ router.post("/Brands_login",async(req,res)=>{
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send("your token:"+token);
+            res.status(201).send(user_email.tokens);
         }
 
     }catch(err){
