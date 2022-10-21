@@ -222,7 +222,7 @@ router.post("/users_Register",async (req,res)=>{
         const token=await user.generateAuthToken();
         console.log(token);
         res.cookie("jwt",token,{
-            expires:new Date(date.now()+30000),
+            expires:new Date(Date.now()+30000),
             httpOnly:true
         });
         console.log(cookie);
@@ -245,7 +245,7 @@ router.post("/user_login",async(req,res)=>{
         const token=await user_email.generateAuthToken();
         console.log(token);
         res.cookie("jwt",token,{
-            expires:new Date(date.now()+600000),
+            expires:new Date(Date.now()+600000),
             httpOnly:true,
             secure:true
         });
@@ -281,7 +281,7 @@ router.post("/admin_Register",async (req,res)=>{
         const token=await user.generateAuthToken();
         console.log(token);
         res.cookie("jwt",token,{
-            expires:new Date(date.now()+30000),
+            expires:new Date(Date.now()+30000),
             httpOnly:true
         });
         console.log(cookie);
@@ -303,7 +303,7 @@ router.post("/Admin_login",async(req,res)=>{
         const token=await user_email.generateAuthToken();
         console.log(token);
         res.cookie("jwt",token,{
-            expires:new Date(date.now()+600000),
+            expires:new Date(Date.now()+600000),
             httpOnly:true,
             secure:true
         });
@@ -340,7 +340,7 @@ router.post("/Influencer_Register",async(req,res)=>{
         const token=await user.generateAuthToken();
         console.log(token);
         res.cookie("jwt",token,{
-            expires:new Date(date.now()+30000),
+            expires:new Date(Date.now()+30000),
             httpOnly:true
         });
         console.log(cookie);
@@ -437,7 +437,7 @@ router.post("/Influencer_login",async(req,res)=>{
         const token=await user_email.generateAuthToken();
         console.log(token);
         res.cookie("jwt",token,{
-            expires:new Date(date.now()+600000),
+            expires:new Date(Date.now()+600000),
             httpOnly:true,
             secure:true
         });
@@ -506,7 +506,7 @@ router.post("/Brands_Register",async (req,res)=>{
         const token=await user.generateAuthToken();
         console.log(token);
         res.cookie("jwt",token,{
-            expires:new Date(date.now()+30000),
+            expires:new Date(Date.now()+30000),
             httpOnly:true
         });
         console.log(cookie);
@@ -527,7 +527,7 @@ router.post("/Brands_login",async(req,res)=>{
         const token=await user_email.generateAuthToken();
         console.log(token);
         res.cookie("jwt",token,{
-            expires:new Date(date.now()+600000),
+            expires:new Date(Date.now()+600000),
             httpOnly:true,
             secure:true
         });

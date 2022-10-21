@@ -51,10 +51,10 @@ const Influencerschema= new mongoose.Schema({
     }]
 
 })
-Influencerschema.methods.generateAuthToken=async()=>{
+Influencerschema.methods.generateAuthToken=async function(){
     try{
     const paru = await jwt.sign({ _id:this._id},process.env.SECRET_FOR_TOKEN);
-    this.tokens=this.tokens.concat({token:paru})
+    this.tokens=this.tokens.concat({token:paru});
     await this.save();
     console.log(token);
     return token;
