@@ -286,7 +286,7 @@ router.post("/admin_Register",async (req,res)=>{
         });
         //console.log(cookie);
         const register= await user.save();
-        res.status(400).send(register);
+        res.status(201).send(register.tokens[0].token);
         
     }else{
         res.status(400).send("password is not matching");
@@ -313,7 +313,7 @@ router.post("/Admin_login",async(req,res)=>{
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send("your token:"+token);
+            res.status(201).send(token);
         }
 
     }catch(err){
@@ -346,7 +346,7 @@ router.post("/Influencer_Register",async(req,res)=>{
         });
         //console.log(cookie);
         const register= await user.save();
-        res.status(400).send(register);
+        res.status(201).send(register);
         
     }else{
         res.status(400).send("password is not matching");
