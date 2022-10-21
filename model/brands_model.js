@@ -45,9 +45,37 @@ const Brandsschema = new mongoose.Schema({
         type:String,
         required:true,
         unique:true
-    }
+    },
+    tokens:[{
+        token:{
+            type:String,
+            required:true
+        }
+    }]
+
 
 })
+Brandsschema.methods.generateAuthToken=async()=>{
+    try{
+    const paru = await jwt.sign({ _id:this._id},process.env.SECRET_FOR_TOKEN);
+    this.tokens=this.tokens.concat({token:paru})
+    await this.save();
+    console.log(token);
+    return token;
+    }catch(error){
+        console.log(err);
+    }
+}
+
+Brandsschema.pre("save",async function(next){
+    if(this.isModified("password")){
+        const passwordhash= await bcrypt.hash(password,10);
+        this.password= await bcrypt.hash(this.password,10);
+        this.repassword=undefined;
+    }
+    next();
+})
+
 
 
 const Brands_detail=new mongoose.model('Brands_detail',Brandsschema);

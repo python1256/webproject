@@ -38,7 +38,35 @@ const adminschema = new mongoose.Schema({
         minlength:10,
         unique:true,
         required:true
+    },
+    tokens:[{
+        token:{
+            type:String,
+            required:true
+        }
+    }]
+
+
+})
+adminschema.methods.generateAuthToken=async()=>{
+    try{
+    const paru = await jwt.sign({ _id:this._id},process.env.SECRET_FOR_TOKEN);
+    this.tokens=this.tokens.concat({token:paru})
+    await this.save();
+    console.log(token);
+    return token;
+    }catch(error){
+        console.log(err);
     }
+}
+
+adminschema.pre("save",async function(next){
+    if(this.isModified("password")){
+        const passwordhash= await bcrypt.hash(password,10);
+        this.password= await bcrypt.hash(this.password,10);
+        this.repassword=undefined;
+    }
+    next();
 })
 
 

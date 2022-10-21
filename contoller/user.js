@@ -264,7 +264,7 @@ router.post("/user_login",async(req,res)=>{
 })
 
 //admin login and registration
-router.post("/admin_Register",(req,res)=>{
+router.post("/admin_Register",async (req,res)=>{
     console.log(req.body);
 
     const password = req.body.password;
@@ -278,15 +278,18 @@ router.post("/admin_Register",(req,res)=>{
             address:req.body.address,
             phone:req.body.phone
         });
-        console.log(user);
-        user.save().then(()=>{
-            res.status(201).send(user);
-            //just need to change send to render and mention the home page
-        }).catch((err)=>{
-        res.status(400).send(err);
-        })
+        const token=await user.generateAuthToken();
+        console.log(token);
+        res.cookie("jwt",token,{
+            expires:new Date(date.now()+30000),
+            httpOnly:true
+        });
+        console.log(cookie);
+        const register= await user.save();
+        res.status(400).send(register);
+        
     }else{
-        res.send("password is not matching");
+        res.status(400).send("password is not matching");
     }
    
 })
@@ -294,15 +297,23 @@ router.post("/admin_Register",(req,res)=>{
 router.post("/Admin_login",async(req,res)=>{
     try{
         const email=req.body.email;
-        const cpassword=req.body.password;
-        console.log(cpassword);
-        const adminemail=await admin_detail.findOne({email:email});
-        console.log(adminemail);
-        if(adminemail.password==cpassword){
-            res.status(201).send("account found");
+        const password=req.body.password;
+        const user_email=await admin_detail.findOne({email:email});
+        const ismatch=bcrypt.compare(password,user_email.password);
+        const token=await user_email.generateAuthToken();
+        console.log(token);
+        res.cookie("jwt",token,{
+            expires:new Date(date.now()+600000),
+            httpOnly:true,
+            secure:true
+        });
+        console.log(`this is ${req.cookies.jwt}`);
+
+        if(!ismatch){
+            res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.send("invalid login credentials");
+            res.status(201).send("your token:"+token);
         }
 
     }catch(err){
@@ -312,7 +323,7 @@ router.post("/Admin_login",async(req,res)=>{
 
 
 //Influencer login registration and otp verification
-router.post("/Influencer_Register",(req,res)=>{
+router.post("/Influencer_Register",async(req,res)=>{
     console.log(req.body);
 
     const password = req.body.password;
@@ -326,14 +337,18 @@ router.post("/Influencer_Register",(req,res)=>{
             phone:req.body.phone,
             Instagram_username:req.body.Instagram_username
         });
-        user.save().then(()=>{
-            res.status(201).send(user);
-            //just need to change send to render and mention the home page
-        }).catch((err)=>{
-        res.status(400).send(err);
-        })
+        const token=await user.generateAuthToken();
+        console.log(token);
+        res.cookie("jwt",token,{
+            expires:new Date(date.now()+30000),
+            httpOnly:true
+        });
+        console.log(cookie);
+        const register= await user.save();
+        res.status(400).send(register);
+        
     }else{
-        res.send("password is not matching");
+        res.status(400).send("password is not matching");
     }
    
 })
@@ -418,15 +433,25 @@ router.post("/Influencer_login",async(req,res)=>{
         const email=req.body.email;
         const password=req.body.password;
         const user_email=await influncer_detail.findOne({email:email});
-        if(user_email.password==password){
-            res.status(201).send("account found");
+        const ismatch=bcrypt.compare(password,user_email.password);
+        const token=await user_email.generateAuthToken();
+        console.log(token);
+        res.cookie("jwt",token,{
+            expires:new Date(date.now()+600000),
+            httpOnly:true,
+            secure:true
+        });
+        console.log(`this is ${req.cookies.jwt}`);
+
+        if(!ismatch){
+            res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.send("invalid password!!");
+            res.status(201).send("your token:"+token);
         }
 
     }catch(err){
-        res.status(400).send("invalid email!!");
+        res.status(400).send("invalid data entry");
     }
 })
 
@@ -462,7 +487,7 @@ router.get("/Get_influencers_data",async(req,res)=>{
 
 
 
-router.post("/Brands_Register",(req,res)=>{
+router.post("/Brands_Register",async (req,res)=>{
     console.log(req.body);
     const password=req.body.password;
     const cpassword=req.body.repassword;
@@ -478,32 +503,45 @@ router.post("/Brands_Register",(req,res)=>{
                 Brands_Ig_username:req.body.Brands_Ig_username
             }
         );
-        user.save().then(()=>{
-            res.status(201).send(user);
-            //just need to change send to render and mention the home page
-        }).catch((err)=>{
-        res.status(400).send(err);
-        })
+        const token=await user.generateAuthToken();
+        console.log(token);
+        res.cookie("jwt",token,{
+            expires:new Date(date.now()+30000),
+            httpOnly:true
+        });
+        console.log(cookie);
+        const register= await user.save();
+        res.status(400).send(register);
+        
     }else{
-        res.send("password is not matching");
+        res.status(400).send("password is not matching");
     }
    
 })
-
 router.post("/Brands_login",async(req,res)=>{
     try{
         const email=req.body.email;
         const password=req.body.password;
         const user_email=await Brand_detail.findOne({email:email});
-        if(user_email.password==password){
-            res.status(201).send("account found");
-            //just need to change send to render and then the page in double quates for routes
+        const ismatch=bcrypt.compare(password,user_email.password);
+        const token=await user_email.generateAuthToken();
+        console.log(token);
+        res.cookie("jwt",token,{
+            expires:new Date(date.now()+600000),
+            httpOnly:true,
+            secure:true
+        });
+        console.log(`this is ${req.cookies.jwt}`);
+
+        if(!ismatch){
+            res.status(400).send("invalid email or password credentials");
+            //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.send("invalid password!!");
+            res.status(201).send("your token:"+token);
         }
 
     }catch(err){
-        res.status(400).send("invalid email!!");
+        res.status(400).send("invalid data entry");
     }
 })
 
