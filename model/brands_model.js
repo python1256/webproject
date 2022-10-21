@@ -70,7 +70,7 @@ Brandsschema.methods.generateAuthToken=async function(){
 
 Brandsschema.pre("save",async function(next){
     if(this.isModified("password")){
-        const passwordhash= await bcrypt.hash(password,10);
+        //const passwordhash= await bcrypt.hash(password,10);
         this.password= await bcrypt.hash(this.password,10);
         this.repassword=undefined;
     }
