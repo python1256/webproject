@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const validator=require('validator');
+const jwt=require("jsonwebtoken");
+const bcrypt=require("bcryptjs");
 const adminschema = new mongoose.Schema({
     admin_name:{
         type : String,
@@ -56,7 +58,7 @@ adminschema.methods.generateAuthToken=async()=>{
     console.log(token);
     return token;
     }catch(error){
-        console.log(err);
+        console.log(error);
     }
 }
 

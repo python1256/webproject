@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const jwt=require("jsonwebtoken");
+const bcrypt=require("bcryptjs");
 const Influencerschema= new mongoose.Schema({
     Influencer_name:{
         type : String,
@@ -56,7 +58,7 @@ Influencerschema.methods.generateAuthToken=async()=>{
     await this.save();
     console.log(token);
     return token;
-    }catch(error){
+    }catch(err){
         console.log(err);
     }
 }

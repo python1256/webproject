@@ -54,7 +54,7 @@ userschema.methods.generateAuthToken=async()=>{
     console.log(token);
     return token;
     }catch(error){
-        console.log(err);
+        console.log(error);
     }
 }
 

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require("validator");
+const jwt=require("jsonwebtoken");
+const bcrypt=require("bcryptjs");
 const Brandsschema = new mongoose.Schema({
     Brands_name:{
         type : String,
@@ -62,7 +64,7 @@ Brandsschema.methods.generateAuthToken=async()=>{
     await this.save();
     console.log(token);
     return token;
-    }catch(error){
+    }catch(err){
         console.log(err);
     }
 }
