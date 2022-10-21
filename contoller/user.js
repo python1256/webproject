@@ -337,6 +337,7 @@ router.post("/Influencer_Register",async(req,res)=>{
             phone:req.body.phone,
             Instagram_username:req.body.Instagram_username
         });
+        console.log(user);
         const token=await user.generateAuthToken();
         console.log(token);
         res.cookie("jwt",token,{
