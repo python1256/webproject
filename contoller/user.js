@@ -225,7 +225,7 @@ router.post("/users_Register",async (req,res)=>{
             expires:new Date(Date.now()+30000),
             httpOnly:true
         });
-        console.log(cookie);
+        //console.log(cookie);
         const register= await user.save();
         console.log("the page part" + register);
         res.status(201).send(user);
@@ -284,7 +284,7 @@ router.post("/admin_Register",async (req,res)=>{
             expires:new Date(Date.now()+30000),
             httpOnly:true
         });
-        console.log(cookie);
+        //console.log(cookie);
         const register= await user.save();
         res.status(400).send(register);
         
@@ -343,7 +343,7 @@ router.post("/Influencer_Register",async(req,res)=>{
             expires:new Date(Date.now()+30000),
             httpOnly:true
         });
-        console.log(cookie);
+        //console.log(cookie);
         const register= await user.save();
         res.status(400).send(register);
         
@@ -509,7 +509,7 @@ router.post("/Brands_Register",async (req,res)=>{
             expires:new Date(Date.now()+30000),
             httpOnly:true
         });
-        console.log(cookie);
+        //console.log(cookie);
         const register= await user.save();
         res.status(400).send(register);
         

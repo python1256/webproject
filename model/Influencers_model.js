@@ -29,7 +29,6 @@ const Influencerschema= new mongoose.Schema({
     },
     repassword:{
         type : String,
-        required:[true]
     },
     phone:{
         type:Number,

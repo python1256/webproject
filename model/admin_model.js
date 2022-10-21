@@ -27,8 +27,7 @@ const adminschema = new mongoose.Schema({
         required:[true]
     },
     repassword:{
-        type : String,
-        required:[true]
+        type : String
     },
     address:{
         type:String,
