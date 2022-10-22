@@ -45,8 +45,7 @@ const Brandsschema = new mongoose.Schema({
     
     Brands_Ig_username:{
         type:String,
-        required:true,
-        unique:true
+        required:true
     },
     tokens:[{
         token:{

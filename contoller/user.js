@@ -512,7 +512,7 @@ router.post("/Brands_Register",async (req,res)=>{
         });
         //console.log(cookie);
         const register= await user.save();
-        res.status(400).send(register);
+        res.status(201).send(register);
         
     }else{
         res.status(400).send("password is not matching");
