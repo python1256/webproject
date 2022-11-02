@@ -7,8 +7,7 @@ const user_detail=require("../model/user_model");
 const admin_detail=require("../model/admin_model");
 const fs = require('fs');
 const path =require("path");
-//const  cron= require("node-cron");
-//const  instaCacheCron=require("./crons/instaCache.cron");
+const  cron= require("node-cron");
 const request=require("request");
 const fast2sms = require('fast-two-sms');
 const bodyparser=require("body-parser");
@@ -20,27 +19,43 @@ const router = express.Router();
 const Image_store=require("../model/image_model");
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcryptjs");
+const axios=require("axios");
+const curl=require("curl");
+const typeDefs = require("../schema");
+const resolvers = require("../resolver");
+const { ApolloServer } = require("apollo-server-express");
 
-//creating jsonweb token
-//const createToken=async async=>{
-  //  const tokeN = await jwt.sign({ _id:"6351306e43ef133b457210d0"},"chfnfjfjnjhnjfbdnkjmndnjmsjddftg");
-    //console.log(tokeN);
-    //const userv=await jwt.verify(token,"chfnfjfjnjhnjfbdnkjmndnjmsjddftg")
-  //  console.log(userv);
-//}
-//createToken();
-//creating bcrypt hash and compare
-//const securePassword =async(password)=>{
-  //  const passwordhash=await bcrypt.hash(password,10);
-   // const passwordmatch=await bcrypt.compare(password,passwordhash)
+const server = new ApolloServer({ typeDefs, resolvers });
+server.start().then(() => {
+  return server.applyMiddleware({ app });
+});
 
-//}
+
+
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
     return res.send(
       `<a href='https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=user_media,user_profile&response_type=code'> Connect to Instagram </a>`
-    );
-  });
+    ); 
+});
+
+//function setupInsta(){
+	//let appId = process.env.INSTAGRAM_APP_ID;
+//	let redUri =  + "/insta";
+//	let url = `https://api.instagram.com/oauth/authorize?client_id=${appId}&redirect_uri=${redUri}&scope=user_profile,user_media&response_type=code`;
+///	window.open(url, "_blank").focus();
+//}
+//setupInsta()
+
+//axios.post("https://paru12.herokuapp.com/init-insta", {
+  //  code: 'AQD_lSpsqHeH7PmaKM7NSsdKi5wV9M_DU-j6Pg-SOGzK1AxLa2iUHFaIKvMqL3nRdxxsH5DBIgIVclZbRF_jkKllrsYcELmld3a_U3IudIP4DS65vk16rK5xqr_BoOhGeWxzkYv6wdl6QVJtzm1hFPZCLBwyXgZXX2BEC9Brlkf9NWsSgZFt1mvf9bS94eLHaD2qWq_cPoyOYA_FpGO01n9Er5Xe4h65IowbjnlNMdNRUA#_',
+    //redirectUrl: process.env.REDIRECT_URI // needs to be registered at fb developer console
+//}).then(({ data }) => {
+    // handle success case
+//})
+// data from frontend
+    
+
 
 //set up multer
 const Storage=multer.diskStorage({
@@ -128,80 +143,6 @@ router.delete("/remover_Brand/:id",async(req,res)=>{
     }
 
 })
-
-   
-//data from backend
-//let code = req.body.code;
-//let redirectUri = req.body.redirectUri;
-
-//let accessToken = null;
-//try {
-
-    // send form based request to Instagram API
-//    let result = request.post({
-  //      url: 'https://api.instagram.com/oauth/access_token',
-    //    form: {
-      //      client_id: process.env.INSTA_APP_ID,
-        //    client_secret: process.env.INSTA_APP_SECRET,
-          //  grant_type: 'authorization_code',
-            //redirect_uri: req.body.redirectUri,
-           // code: req.body.code
-        //}
-   // });
-
-    // Got access token. Parse string response to JSON
-   // accessToken = JSON.parse(result).access_token;
-//} catch (e) {
-  //  console.log("Error=====", e);
-//}
-
-//get short lived access token
-
-//router.get("/get_shot_access_token",async(req,res)=>{
-  //  try {
-    //    let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTA_APP_SECRET}&access_token=${accessToken}`)
-    //    accessToken = resp.data.access_token;
-     //   const saveit=new Access_token({short_access_token:accessToken});
- //       console.log(saveit);
-   //     saveit.save();
-  //    } catch (e) {
-    //    console.log("Error=====", e.data);
-    //  }
-//})
-
-
-// run immediately after server starts
-//instaRefreshCron();
-
-// refresh instaAccessToken eg: weekly(every Sat)
-//cron.schedule('* * * * * 7', async () => {
-//    await instaRefreshCron();
-//});
-
-// update instaPhotos Cache every 3 hours
-//cron.schedule('0 0 */3 * * *', async () => {
-    // this method fetches updated Insta images and saves to DB.
-  //    await instaCacheCron();
-  //});
-
-//get log lived access token
-//router.get("/long_access_token",async(req,res)=>{
-  //  try {
-  //      let oldAccessToken = Access_token.short_access_token; // get from DB
-    //    let resp = await axios.get(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${oldAccessToken}`)
-    //    if (resp.data.access_token) {
-      //      let newAccessToken = resp.data.access_token;
-        //    let saveit=new Access_token({long_access_token:newAccessToken});
-          //  saveit.save();
-    //        res.send(saveit);
-      //  }
-//    } catch (e) {
-  //      console.log("Error=====", e.response.data);
- //   }
-//})
-
-
-
   //user login and register
 
 router.post("/users_Register",async (req,res)=>{

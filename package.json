@@ -21,6 +21,7 @@
     "cookie-parser": "^1.4.6",
     "corn": "^0.0.1",
     "cors": "^2.8.5",
+    "curl": "^0.1.4",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "express-handlebars": "^6.0.6",
@@ -29,6 +30,7 @@
     "googleapis": "^108.0.0",
     "graphql": "^16.6.0",
     "https": "^1.0.0",
+    "import": "^0.0.6",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.10.0",
     "mongoose": "^6.6.3",
@@ -42,6 +44,7 @@
     "puretext": "^0.1.5",
     "request": "^2.88.2",
     "sinch-request": "^0.0.8",
+    "util": "^0.12.5",
     "validator": "^13.7.0"
   }
 }
