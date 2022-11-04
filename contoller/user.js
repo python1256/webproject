@@ -57,8 +57,8 @@ gettoken=async()=>{
                 client_id: process.env.INSTAGRAM_APP_ID,
                 client_secret: process.env.INSTAGRAM_APP_SECRET,
                 grant_type: 'authorization_code',
-                redirect_uri: req.body.redirectUri,
-                code:req.body.code
+                redirect_uri: process.env.REDIRECT_URI,
+                code:process.env.AUTHORIZATION_CODE
             }
         });
         console.log(result.data);
@@ -93,7 +93,7 @@ gettoken=async()=>{
     //});
     
     try {
-        let oldAccessToken = Access_token.short_access_token; // get from DB
+        let oldAccessToken=Access_token.short_access_token; // get from DB
         let resp = await axios.get(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${oldAccessToken}`)
         if (resp.data.access_token) {
             let newAccessToken = resp.data.access_token;
