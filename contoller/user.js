@@ -46,68 +46,10 @@ router.get("/get-auth-code", (req, res, next) => {
     // handle success case
 //})
 // data from frontend
-gettoken=async()=>{
-    let accessToken = null;
-    try {
-        // send form based request to Instagram API
-        console.log("hii");
-        let result = request.post({
-            url: 'https://api.instagram.com/oauth/access_token',
-            form: {
-                client_id: process.env.INSTAGRAM_APP_ID,
-                client_secret: process.env.INSTAGRAM_APP_SECRET,
-                grant_type: 'authorization_code',
-                redirect_uri: process.env.REDIRECT_URI,
-                code:process.env.AUTHORIZATION_CODE
-            }
-        });
-        console.log(result.data);
-        // Got access token. Parse string response to JSON
-        accessToken = JSON.parse(result).access_token;
-        console.log(accessToken);
-    } catch (e) {
-        console.log("Error=====", e);
-    }
-    
-            
-    
-    try {
-        let resp = await axios.get(
-            `https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_APP_SECRET}&access_token=${accessToken}`)
-            console.log(resp.data)
-            accessToken = resp.data.access_token;
-            const act=new Access_token({
-                short_access_token:accessToken
-            });
-            console.log(act);
-            const store=await act.save();
-        } 
-        catch (e) {
-        console.log("Error=====", e.data);
-    }
-           
-    //instaRefreshCron();
-     // refresh instaAccessToken eg: weekly(every Sat)
-     //cron.schedule('* * * * * 7', async () => {
-    //    await instaRefreshCron();
-    //});
-    
-    try {
-        let oldAccessToken=Access_token.short_access_token; // get from DB
-        let resp = await axios.get(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${oldAccessToken}`)
-        if (resp.data.access_token) {
-            let newAccessToken = resp.data.access_token;
-            const act=new Access_token({
-                long_access_token:newAccessToken
-            });
-            const store=await act.save();
-        }
-    } catch (e) {
-        console.log("Error=====", e.data);
-    }
+gettoken=async()=>{ 
     
     try{
-        let instaAccessToken = Access_token.long_access_token; // get from DB
+        let instaAccessToken = "IGQVJVMnp3SDgxUzhIV3VYbGxMZAzlSSTJsMnZAIRjk5WkVucVVnRjZAUVFNKOTkxc3JIQzlSY04yajZAUc2ZAKWmdMcnhrM013ZADRnX1d0eEg5dHFvTjYtWHo1Yk45dzgySHBDX2UxTms3d3NTYVlvM1pEQwZDZD"; // get from DB
             let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url&access_token=${instaAccessToken}`);
             resp = resp.data;
             let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
