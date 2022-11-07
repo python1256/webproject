@@ -47,13 +47,35 @@ router.get("/get-auth-code", (req, res, next) => {
 //})
 // data from frontend
 gettoken=async()=>{ 
-    
     try{
-        let instaAccessToken = "IGQVJVMnp3SDgxUzhIV3VYbGxMZAzlSSTJsMnZAIRjk5WkVucVVnRjZAUVFNKOTkxc3JIQzlSY04yajZAUc2ZAKWmdMcnhrM013ZADRnX1d0eEg5dHFvTjYtWHo1Yk45dzgySHBDX2UxTms3d3NTYVlvM1pEQwZDZD"; // get from DB
-            let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url&access_token=${instaAccessToken}`);
+        let instaAccessToken = process.env.INSTAGRAM_SHORT_TOKEN; // get from DB
+            let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_count,media_url&access_token=${instaAccessToken}`);
             resp = resp.data;
+            console.log(resp);
             let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
             console.log(instaPhotos);
+            let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
+            console.log(instaVedio);
+            let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
+            `);
+            console.log(res1.data);
+            //let oldAccessToken =  "XXXXX"; // get from DB
+            let respt = await axios.get(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${instaAccessToken}`)
+            console.log(respt.data);
+            const ala=await Access_token(
+                {
+                    access_token:respt.data. access_token,
+                    token_type:respt.data.token_type,
+                    expires_in:respt.data.expires_in
+                }
+            );
+            const register=ala.save();
+            console.log(ala);
+
+
+
+
+           // let resp = await axios.get(``)
         } 
         catch (e) {
              console.log(e);
