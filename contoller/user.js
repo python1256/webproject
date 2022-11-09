@@ -21,6 +21,8 @@ const jwt=require("jsonwebtoken");
 const bcrypt=require("bcryptjs");
 const axios=require("axios");
 const curl=require("curl");
+const followers = require('instagram-followers');
+
 
 
 
@@ -30,22 +32,8 @@ router.get("/get-auth-code", (req, res, next) => {
       `<a href='https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=user_media,user_profile&response_type=code'> Connect to Instagram </a>`
     ); 
 });
+//getting token
 
-//function setupInsta(){
-	//let appId = process.env.INSTAGRAM_APP_ID;
-//	let redUri =  + "/insta";
-//	let url = `https://api.instagram.com/oauth/authorize?client_id=${appId}&redirect_uri=${redUri}&scope=user_profile,user_media&response_type=code`;
-///	window.open(url, "_blank").focus();
-//}
-//setupInsta()
-
-//axios.post("https://paru12.herokuapp.com/init-insta", {
-  //  code: 'AQD_lSpsqHeH7PmaKM7NSsdKi5wV9M_DU-j6Pg-SOGzK1AxLa2iUHFaIKvMqL3nRdxxsH5DBIgIVclZbRF_jkKllrsYcELmld3a_U3IudIP4DS65vk16rK5xqr_BoOhGeWxzkYv6wdl6QVJtzm1hFPZCLBwyXgZXX2BEC9Brlkf9NWsSgZFt1mvf9bS94eLHaD2qWq_cPoyOYA_FpGO01n9Er5Xe4h65IowbjnlNMdNRUA#_',
-    //redirectUrl: process.env.REDIRECT_URI // needs to be registered at fb developer console
-//}).then(({ data }) => {
-    // handle success case
-//})
-// data from frontend
 gettoken=async()=>{ 
     try{
         let instaAccessToken = process.env.INSTAGRAM_SHORT_TOKEN; // get from DB
@@ -91,10 +79,44 @@ gettoken=async()=>{
     
     
 }
-gettoken();
-  
-      
+router.get("/everything",(req,res)=>{
+    gettoken();
+});
 
+
+getimages=async(req,res)=>{
+    try{
+        const id="6368bf9f05c927c72157a929";
+        let instaAccessToken1 = await Access_token.findById(id);
+        console.log(instaAccessToken1);
+
+
+        let instaAccessToken = process.env.INSTAGRAM_LONG_TOKEN;
+        //console.log(instaAccessToken.access_token);
+        //const token= instaAccessToken.access_token;
+        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_count,media_url&access_token=${instaAccessToken}`);
+        console.log(resp.data);
+        resp = resp.data;
+        let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
+        console.log(instaPhotos);
+        let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
+        console.log(instaVedio);
+        let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
+            `);
+        console.log(res1.data);
+        
+        let re1=await axios.get(`https://graph.instagram.com/me?fields=account_type&access_token=${instaAccessToken} `);
+        console.log(re1.data);
+        //let reo1=await axios.get(`https://graph.instagram.com/me?fields=&access_token=${instaAccessToken} `);
+        //console.log(reo1.data);     
+            
+        
+    
+    }catch(error){
+        console.log(error);
+    }
+}      
+getimages()
 
 //set up multer
 const Storage=multer.diskStorage({
