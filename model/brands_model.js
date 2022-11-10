@@ -8,6 +8,10 @@ const Brandsschema = new mongoose.Schema({
         required : true,
         minlength:3
     },
+    Brands_username:{
+        type:String,
+        required:true
+    },
     email:{
         type:String,
         unique:[
@@ -23,6 +27,22 @@ const Brandsschema = new mongoose.Schema({
             true,"email filed is mandatory"
         ]
     },
+    Street_Address:{
+        type:String,
+        required:true
+    },
+    city:{
+        type:String,
+        required:true
+    },
+    State:{
+        type:String,
+        required:true
+    },
+    postal_code:{
+        type:String,
+        required:true
+    },
     password:{
         type : String,
         required:[true]
@@ -31,10 +51,6 @@ const Brandsschema = new mongoose.Schema({
         type : String,
 
     },
-    address:{
-        type:String,
-        required:true
-    },
     phone:{
         type:Number,
         maxlength:10,
@@ -42,10 +58,14 @@ const Brandsschema = new mongoose.Schema({
         unique:true,
         required:true
     },
-    
-    Brands_Ig_username:{
+    Instagram_link:{
         type:String,
         required:true
+    },
+    Instagram_follower:{
+        type:Number,
+        required:true
+
     },
     tokens:[{
         token:{

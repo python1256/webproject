@@ -22,8 +22,8 @@ const bcrypt=require("bcryptjs");
 const axios=require("axios");
 const curl=require("curl");
 const followers = require('instagram-followers');
-
-
+const InfluencerLink_store=require("../model/Influencer_Link");
+const BrandsLink_store=require("../model/Brands_Link");
 
 
 //redirecting the auth code
@@ -117,6 +117,49 @@ getimages=async(req,res)=>{
     }
 }      
 getimages()
+
+//Influencer link api
+router.post("/Influencer_link_account",(req,res)=>{
+    const data=new InfluencerLink_store({
+        Instagram_link:req.body.Instagram_link,
+        Instagram_follower:req.body.Instagram_follower,
+        Facebook_Link:req.body.Facebook_Link,
+        Facebook_Likes:req.body.Facebook_Likes,
+        tiktok_Link:req.body.tiktok_Link,
+        tiktok_follower:req.body.tiktok_follower,
+        Youtube_Link:req.body.Youtube_Link,
+        Youtube_Subscribers:req.body.Youtube_Subscribers,
+        Twitter_Link:req.body.Twitter_Link,
+        Twitter_follower:req.body.Twitter_follower,
+        website_Link:req.body.website_Link
+    })
+    data.save().then(()=>{
+        res.status(201).send(data);
+    }).catch((e)=>{
+        res.status(400).send(e);
+    })
+})
+//brands link api
+router.post("/Brands_link_account",(req,res)=>{
+    const data=new BrandsLink_store({
+        Instagram_link:req.body.Instagram_link,
+        Instagram_follower:req.body.Instagram_follower,
+        Facebook_Link:req.body.Facebook_Link,
+        Facebook_Likes:req.body.Facebook_Likes,
+        tiktok_Link:req.body.tiktok_Link,
+        tiktok_follower:req.body.tiktok_follower,
+        Youtube_Link:req.body.Youtube_Link,
+        Youtube_Subscribers:req.body.Youtube_Subscribers,
+        Twitter_Link:req.body.Twitter_Link,
+        Twitter_follower:req.body.Twitter_follower,
+        website_Link:req.body.website_Link
+    })
+    data.save().then(()=>{
+        res.status(201).send(data);
+    }).catch((e)=>{
+        res.status(400).send(e);
+    })
+})
 
 //set up multer
 const Storage=multer.diskStorage({
@@ -332,12 +375,19 @@ router.post("/Influencer_Register",async(req,res)=>{
     const cpassword = req.body.repassword;
     if(password == cpassword){
         const user = new influncer_detail({
-            Influencer_name:req.body.Influencer_name,
+            Influencer_username:req.body.Influencer_username,
+            Influencer_Firstname:req.body.Influencer_Firstname,
+            Influencer_Lastname:req.body.Influencer_Lastname,
             email:req.body.email,
+            Street_Address:req.body.Street_Address,
+            city:req.body.city,
+            State:req.body.State,
+            postal_code:req.body.postal_code,
             password:req.body.password,
             repassword:req.body.repassword,
             phone:req.body.phone,
-            Instagram_username:req.body.Instagram_username
+            Instagram_link:req.body.Instagram_link,
+            Instagram_follower:req.body.Instagram_follower
         });
         console.log(user);
         const token=await user.generateAuthToken();
@@ -498,12 +548,19 @@ router.post("/Brands_Register",async (req,res)=>{
         const user=new Brand_detail(
             {
                 Brands_name:req.body.Brands_name,
+                Brands_username:req.body.Brands_username,
                 email:req.body.email,
+                Street_Address:req.body.Street_Address,
+                city:req.body.city,
+                State:req.body.State,
+                postal_code:req.body.postal_code,
                 password:req.body.password,
                 repassword:req.body.repassword,
-                address:req.body.address,
                 phone:req.body.phone,
-                Brands_Ig_username:req.body.Brands_Ig_username
+                Instagram_link:req.body.Instagram_link,
+                Instagram_follower:req.body.Instagram_follower
+
+
             }
         );
         const token=await user.generateAuthToken();

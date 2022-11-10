@@ -3,7 +3,17 @@ const validator = require("validator");
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcryptjs");
 const Influencerschema= new mongoose.Schema({
-    Influencer_name:{
+    Influencer_username:{
+        Type:String,
+        unique:true,
+        Required:true
+    },
+    Influencer_Firstname:{
+        type : String,
+        required : true,
+        minlength:3
+    },
+    Influencer_Lastname:{
         type : String,
         required : true,
         minlength:3
@@ -23,6 +33,22 @@ const Influencerschema= new mongoose.Schema({
             true,"email filed is mandatory"
         ]
     },
+    Street_Address:{
+        type:String,
+        required:true
+    },
+    city:{
+        type:String,
+        required:true
+    },
+    State:{
+        type:String,
+        required:true
+    },
+    postal_code:{
+        type:String,
+        required:true
+    },
     password:{
         type : String,
         required:[true]
@@ -39,9 +65,14 @@ const Influencerschema= new mongoose.Schema({
         required:true
     },
     
-    Instagram_username:{
+    Instagram_link:{
         type:String,
         required:true
+    },
+    Instagram_follower:{
+        type:Number,
+        required:true
+
     },
     tokens:[{
         token:{
