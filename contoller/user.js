@@ -100,14 +100,18 @@ router.get("/getImages",(req,res)=>{
                 resp = resp.data;
                 let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
                 console.log(instaPhotos);
+                res.send(instaPhotos);
                 let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
                 console.log(instaVedio);
+                res.send(instaVedio)
                 let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
                     `);
                 console.log(res1.data);
+                res.send(res1.data);
                 
                 let re1=await axios.get(`https://graph.instagram.com/me?fields=account_type&access_token=${instaAccessToken} `);
                 console.log(re1.data);
+                res.send(re1.data);
                 //let reo1=await axios.get(`https://graph.instagram.com/me?fields=&access_token=${instaAccessToken} `);
                 //console.log(reo1.data);     
                     
@@ -118,9 +122,6 @@ router.get("/getImages",(req,res)=>{
             }
         } 
         res.status(201).send(getimages());     
-        
-        
-        
     }catch(error){
         res.status(400).send(error);
     }
