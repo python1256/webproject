@@ -4,9 +4,8 @@ const jwt=require("jsonwebtoken");
 const bcrypt=require("bcryptjs");
 const Influencerschema= new mongoose.Schema({
     Influencer_username:{
-        Type:String,
-        unique:true,
-        Required:true
+        type:String,
+        required : true
     },
     Influencer_Firstname:{
         type : String,

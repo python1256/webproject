@@ -83,40 +83,48 @@ router.get("/everything",(req,res)=>{
     gettoken();
 });
 
-
-getimages=async(req,res)=>{
+router.get("/getImages",(req,res)=>{
     try{
-        const id="6368bf9f05c927c72157a929";
-        let instaAccessToken1 = await Access_token.findById(id);
-        console.log(instaAccessToken1);
-
-
-        let instaAccessToken = process.env.INSTAGRAM_LONG_TOKEN;
-        //console.log(instaAccessToken.access_token);
-        //const token= instaAccessToken.access_token;
-        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_count,media_url&access_token=${instaAccessToken}`);
-        console.log(resp.data);
-        resp = resp.data;
-        let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
-        console.log(instaPhotos);
-        let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
-        console.log(instaVedio);
-        let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
-            `);
-        console.log(res1.data);
+        getimages=async(req,res)=>{
+            try{
+                //const id="6368bf9f05c927c72157a929";
+                //let instaAccessToken1 = await Access_token.findById(id);
+                console.log(instaAccessToken1);
         
-        let re1=await axios.get(`https://graph.instagram.com/me?fields=account_type&access_token=${instaAccessToken} `);
-        console.log(re1.data);
-        //let reo1=await axios.get(`https://graph.instagram.com/me?fields=&access_token=${instaAccessToken} `);
-        //console.log(reo1.data);     
+        
+                let instaAccessToken = process.env.INSTAGRAM_LONG_TOKEN;
+                //console.log(instaAccessToken.access_token);
+                //const token= instaAccessToken.access_token;
+                let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_count,media_url&access_token=${instaAccessToken}`);
+                console.log(resp.data);
+                resp = resp.data;
+                let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
+                console.log(instaPhotos);
+                let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
+                console.log(instaVedio);
+                let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
+                    `);
+                console.log(res1.data);
+                
+                let re1=await axios.get(`https://graph.instagram.com/me?fields=account_type&access_token=${instaAccessToken} `);
+                console.log(re1.data);
+                //let reo1=await axios.get(`https://graph.instagram.com/me?fields=&access_token=${instaAccessToken} `);
+                //console.log(reo1.data);     
+                    
+                
             
+            }catch(error){
+                console.log(error);
+            }
+        } 
+        res.status(201).send(getimages());     
         
-    
+        
+        
     }catch(error){
-        console.log(error);
+        res.status(400).send(error);
     }
-}      
-getimages()
+})
 
 //Influencer link api
 router.post("/Influencer_link_account",(req,res)=>{
