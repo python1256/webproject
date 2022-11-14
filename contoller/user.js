@@ -116,8 +116,9 @@ getimages=async(req,res)=>{
         console.log(error);
     }
 }      
-
-getimages()
+router.get("/images",(req,res)=>{
+    getimages()
+});
 
 //Influencer link api
 router.post("/Influencer_link_account",(req,res)=>{
@@ -374,6 +375,7 @@ router.post("/Influencer_Register",async(req,res)=>{
 
     const password = req.body.password;
     const cpassword = req.body.repassword;
+    console.log("hii");
     if(password == cpassword){
         const user = new influncer_detail({
             Influencer_username:req.body.Influencer_username,
