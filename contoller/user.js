@@ -24,7 +24,7 @@ const curl=require("curl");
 const followers = require('instagram-followers');
 const InfluencerLink_store=require("../model/Influencer_Link");
 const BrandsLink_store=require("../model/Brands_Link");
-
+const Image_stor=require("../model/url");
 
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
@@ -44,6 +44,7 @@ gettoken=async()=>{
             console.log(instaPhotos);
             let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
             console.log(instaVedio);
+            
             let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
             `);
             console.log(res1.data);
@@ -79,8 +80,7 @@ gettoken=async()=>{
     
     
 }
-router.get("/cf",(req,res)=>{
- gettoken();})
+// gettoken()
 
 
 
@@ -99,6 +99,8 @@ getimages=async(req,res)=>{
         resp = resp.data;
         let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
         console.log(instaPhotos);
+        const ala1=new Image_stor({url:instaPhotos});
+       
         let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
         console.log(instaVedio);
         let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
@@ -116,9 +118,9 @@ getimages=async(req,res)=>{
         console.log(error);
     }
 }      
-router.get("/images",(req,res)=>{
+
     getimages()
-});
+
 
 //Influencer link api
 router.post("/Influencer_link_account",(req,res)=>{

@@ -14,7 +14,7 @@ const auth=require("./middleware/auth");
 
 app.use(cors(
     {
-        origin:"http://localhost:5500",
+        origin:"http://localhost:3000",
         credentials:true,
         optionsSuccessStatus:200
     }
