@@ -80,17 +80,12 @@ gettoken=async()=>{
     
     
 }
-// gettoken()
+ //gettoken()
 
 
 
-getimages=async(req,res)=>{
+getimages=async()=>{
     try{
-        const id="6368bf9f05c927c72157a929";
-        //let instaAccessToken1 = await Access_token.findById(id);
-        //console.log(instaAccessToken1);
-
-
         let instaAccessToken = process.env.INSTAGRAM_LONG_TOKEN;
         //console.log(instaAccessToken.access_token);
         //const token= instaAccessToken.access_token;
@@ -98,9 +93,7 @@ getimages=async(req,res)=>{
         console.log(resp.data);
         resp = resp.data;
         let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
-        console.log(instaPhotos);
-        const ala1=new Image_stor({url:instaPhotos});
-       
+        console.log(instaPhotos);     
         let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
         console.log(instaVedio);
         let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
@@ -118,8 +111,7 @@ getimages=async(req,res)=>{
         console.log(error);
     }
 }      
-
-    getimages()
+ getimages()
 
 
 //Influencer link api

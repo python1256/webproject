@@ -1,13 +1,13 @@
 const mongoose=require("mongoose");
-const validator=require('url-validator');
+const validator=require('valid-url');
 const Linkschema = new mongoose.Schema({
     Instagram_Link:{
         type:String,
         unique:[
-            true,"Email is mandatory"
+            true,"link is mandatory"
         ],
-        validator(value){
-            if(!validator(value)){
+        validate(value){
+            if(!validator.isUri(value)){
                 throw new Error("invalid url")
             }
         },
@@ -21,15 +21,15 @@ const Linkschema = new mongoose.Schema({
     Facebook_Link:{
         type:String,
         unique:[
-            true,"Email is mandatory"
+            true,"link is mandatory"
         ],
-        validator(value){
-            if(!validator(value)){
+        validate(value){
+            if(!validator.isUri(value)){
                 throw new Error("invalid url")
             }
         },
         required:[
-            true,"email filed is mandatory"
+            true,"link filed is mandatory"
         ],
     },
     Facebook_Likes:{
@@ -38,15 +38,15 @@ const Linkschema = new mongoose.Schema({
     tiktok_Link:{
         type:String,
         unique:[
-            true,"Email is mandatory"
+            true,"link is mandatory"
         ],
-        validator(value){
-            if(!validator(value)){
+        validate(value){
+            if(!validator.isUri(value)){
                 throw new Error("invalid url")
             }
         },
         required:[
-            true,"email filed is mandatory"
+            true,"link filed is mandatory"
         ],
     },
     tiktok_follower:{
@@ -55,15 +55,15 @@ const Linkschema = new mongoose.Schema({
     Youtube_Link:{
         type:String,
         unique:[
-            true,"Email is mandatory"
+            true,"link is mandatory"
         ],
-        validator(value){
-            if(!validator(value)){
+        validate(value){
+            if(!validator.isUri(value)){
                 throw new Error("invalid url")
             }
         },
         required:[
-            true,"email filed is mandatory"
+            true,"link filed is mandatory"
         ],
     },
     Youtube_Subscribers:{
@@ -72,10 +72,10 @@ const Linkschema = new mongoose.Schema({
     Twitter_Link:{
         type:String,
         unique:[
-            true,"Email is mandatory"
+            true,"link is mandatory"
         ],
-        validator(value){
-            if(!validator(value)){
+        validate(value){
+            if(!validator.isUri(value)){
                 throw new Error("invalid url")
             }
         },
@@ -89,15 +89,15 @@ const Linkschema = new mongoose.Schema({
     website_Link:{
         type:String,
         unique:[
-            true,"Email is mandatory"
+            true,"link is mandatory"
         ],
-        validator(value){
-            if(!validator(value)){
+        validate(value){
+            if(!validator.isUri(value)){
                 throw new Error("invalid url")
             }
         },
         required:[
-            true,"email filed is mandatory"
+            true,"link filed is mandatory"
         ],
     }
 })
