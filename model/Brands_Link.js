@@ -1,16 +1,11 @@
 const mongoose=require("mongoose");
-const validator=require('valid-url');
+//const validator=require('valid-url');
 const Linkschema = new mongoose.Schema({
     Instagram_Link:{
         type:String,
         unique:[
             true,"link is mandatory"
         ],
-        validate(value){
-            if(!validator.isUri(value)){
-                throw new Error("invalid url")
-            }
-        },
         required:[
             true,"email filed is mandatory"
         ],
@@ -23,11 +18,6 @@ const Linkschema = new mongoose.Schema({
         unique:[
             true,"link is mandatory"
         ],
-        validate(value){
-            if(!validator.isUri(value)){
-                throw new Error("invalid url")
-            }
-        },
         required:[
             true,"link filed is mandatory"
         ],
@@ -40,11 +30,6 @@ const Linkschema = new mongoose.Schema({
         unique:[
             true,"link is mandatory"
         ],
-        validate(value){
-            if(!validator.isUri(value)){
-                throw new Error("invalid url")
-            }
-        },
         required:[
             true,"link filed is mandatory"
         ],
@@ -57,11 +42,6 @@ const Linkschema = new mongoose.Schema({
         unique:[
             true,"link is mandatory"
         ],
-        validate(value){
-            if(!validator.isUri(value)){
-                throw new Error("invalid url")
-            }
-        },
         required:[
             true,"link filed is mandatory"
         ],
@@ -74,11 +54,6 @@ const Linkschema = new mongoose.Schema({
         unique:[
             true,"link is mandatory"
         ],
-        validate(value){
-            if(!validator.isUri(value)){
-                throw new Error("invalid url")
-            }
-        },
         required:[
             true,"email filed is mandatory"
         ],
@@ -91,11 +66,6 @@ const Linkschema = new mongoose.Schema({
         unique:[
             true,"link is mandatory"
         ],
-        validate(value){
-            if(!validator.isUri(value)){
-                throw new Error("invalid url")
-            }
-        },
         required:[
             true,"link filed is mandatory"
         ],
