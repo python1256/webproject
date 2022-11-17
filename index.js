@@ -18,7 +18,8 @@ app.use(cors(
         credentials:true,
         optionsSuccessStatus:200
     }
-)); 
+));
+app.use('/uploads', express.static('./uploads')); 
 app.use(cookieparser());
 //app.engine('handlebars',exphbs({extname:"hbs",defaultLayout:false,layoutDir:"views/"}));
 app.set('veiw engine','handlebars');

@@ -159,7 +159,7 @@ router.post("/Brands_link_account",(req,res)=>{
 
 //set up multer
 const Storage=multer.diskStorage({
-    destination:'uploads',
+    destination:function(req,file,cb){cb(null,'./uploads');},
     filename:(req,file,cb)=>{
        cb(null,file.originalname);
     },
