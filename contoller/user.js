@@ -34,99 +34,15 @@ router.get("/get-auth-code", (req, res, next) => {
 });
 //getting token
 
-gettoken=async()=>{ 
-    try{
-        let instaAccessToken = process.env.INSTAGRAM_SHORT_TOKEN; // get from DB
-            let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_count,media_url&access_token=${instaAccessToken}`);
-            resp = resp.data;
-            console.log(resp);
-            let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
-            console.log(instaPhotos);
-            let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
-            console.log(instaVedio);
-            
-            let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
-            `);
-            console.log(res1.data);
-            //let oldAccessToken =  "XXXXX"; // get from DB
-            let respt = await axios.get(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${instaAccessToken}`)
-            console.log(respt.data);
-            const ala=await Access_token(
-                {
-                    access_token:respt.data. access_token,
-                    token_type:respt.data.token_type,
-                    expires_in:respt.data.expires_in
-                }
-            );
-            const register=ala.save();
-            console.log(ala);
-
-
-
-
-           // let resp = await axios.get(``)
-        } 
-        catch (e) {
-             console.log(e);
-    }
-    
-    // run immediately after server starts
-    //instaCacheCron();
-     // update instaPhotos Cache every 3 hours
-     //cron.schedule('0 0 */3 * * *', async () => {
-           // this method fetches updated Insta images and saves to DB.
-      //       await instaCacheCron();
-       //  });
-    
-    
-}
- //gettoken()
-
-
-
-getimages=async()=>{
-    try{
-        let instaAccessToken = process.env.INSTAGRAM_LONG_TOKEN;
-        //console.log(instaAccessToken.access_token);
-        //const token= instaAccessToken.access_token;
-        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_count,media_url&access_token=${instaAccessToken}`);
-        console.log(resp.data);
-        resp = resp.data;
-        let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
-        console.log(instaPhotos);     
-        let instaVedio = resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
-        console.log(instaVedio);
-        let res1=await axios.get(`https://graph.instagram.com/me?fields=id,username&access_token=${instaAccessToken}
-            `);
-        console.log(res1.data);
-        
-        let re1=await axios.get(`https://graph.instagram.com/me?fields=account_type&access_token=${instaAccessToken} `);
-        console.log(re1.data);
-        //let reo1=await axios.get(`https://graph.instagram.com/me?fields=&access_token=${instaAccessToken} `);
-        //console.log(reo1.data);     
-            
-        
-    
-    }catch(error){
-        console.log(error);
-    }
-}      
- //getimages()
-
 
 //Influencer link api
 router.post("/Influencer_link_account",(req,res)=>{
     const data=new InfluencerLink_store({
         Instagram_link:req.body.Instagram_link,
-        Instagram_follower:req.body.Instagram_follower,
         Facebook_Link:req.body.Facebook_Link,
-        Facebook_Likes:req.body.Facebook_Likes,
         tiktok_Link:req.body.tiktok_Link,
-        tiktok_follower:req.body.tiktok_follower,
         Youtube_Link:req.body.Youtube_Link,
-        Youtube_Subscribers:req.body.Youtube_Subscribers,
         Twitter_Link:req.body.Twitter_Link,
-        Twitter_follower:req.body.Twitter_follower,
         website_Link:req.body.website_Link
     })
     data.save().then(()=>{
@@ -139,15 +55,10 @@ router.post("/Influencer_link_account",(req,res)=>{
 router.post("/Brands_link_account",(req,res)=>{
     const data=new BrandsLink_store({
         Instagram_link:req.body.Instagram_link,
-        Instagram_follower:req.body.Instagram_follower,
         Facebook_Link:req.body.Facebook_Link,
-        Facebook_Likes:req.body.Facebook_Likes,
         tiktok_Link:req.body.tiktok_Link,
-        tiktok_follower:req.body.tiktok_follower,
         Youtube_Link:req.body.Youtube_Link,
-        Youtube_Subscribers:req.body.Youtube_Subscribers,
         Twitter_Link:req.body.Twitter_Link,
-        Twitter_follower:req.body.Twitter_follower,
         website_Link:req.body.website_Link
     })
     data.save().then(()=>{

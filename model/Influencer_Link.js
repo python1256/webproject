@@ -10,9 +10,6 @@ const Linkschema = new mongoose.Schema({
             true,"link filed is mandatory"
         ],
     },
-    Instagram_follower:{
-        typeof:String,
-    },
     Facebook_Link:{
         type:String,
         unique:[
@@ -21,9 +18,6 @@ const Linkschema = new mongoose.Schema({
         required:[
             true,"link filed is mandatory"
         ],
-    },
-    Facebook_Likes:{
-        typeof:String,
     },
     tiktok_Link:{
         type:String,
@@ -34,9 +28,6 @@ const Linkschema = new mongoose.Schema({
             true,"link filed is mandatory"
         ],
     },
-    tiktok_follower:{
-        typeof:String,
-    },
     Youtube_Link:{
         type:String,
         unique:[
@@ -46,9 +37,6 @@ const Linkschema = new mongoose.Schema({
             true,"link filed is mandatory"
         ],
     },
-    Youtube_Subscribers:{
-        typeof:String,
-    },
     Twitter_Link:{
         type:String,
         unique:[
@@ -57,9 +45,6 @@ const Linkschema = new mongoose.Schema({
         required:[
             true,"link filed is mandatory"
         ],
-    },
-    Twitter_follower:{
-        typeof:String,
     },
     website_Link:{
         type:String,
