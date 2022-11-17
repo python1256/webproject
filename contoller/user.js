@@ -111,7 +111,7 @@ router.post("/upload_Image",(req,res)=>{
             const newimage=new Image_store({
                 name:req.body.name,
                 image:{
-                    date:req.file.filename,
+                    data:req.file.filename,
                     contentType:'image/png'
                 } 
 
