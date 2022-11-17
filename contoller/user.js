@@ -111,7 +111,7 @@ getimages=async()=>{
         console.log(error);
     }
 }      
- getimages()
+ //getimages()
 
 
 //Influencer link api
@@ -383,8 +383,7 @@ router.post("/Influencer_Register",async(req,res)=>{
             password:req.body.password,
             repassword:req.body.repassword,
             phone:req.body.phone,
-            Instagram_link:req.body.Instagram_link,
-            Instagram_follower:req.body.Instagram_follower
+            Instagram_link:req.body.Instagram_link
         });
         console.log(user);
         const token=await user.generateAuthToken();
@@ -554,8 +553,7 @@ router.post("/Brands_Register",async (req,res)=>{
                 password:req.body.password,
                 repassword:req.body.repassword,
                 phone:req.body.phone,
-                Instagram_link:req.body.Instagram_link,
-                Instagram_follower:req.body.Instagram_follower
+                Instagram_link:req.body.Instagram_link
 
 
             }

@@ -62,11 +62,7 @@ const Brandsschema = new mongoose.Schema({
         type:String,
         required:true
     },
-    Instagram_follower:{
-        type:Number,
-        required:true
-
-    },
+    
     tokens:[{
         token:{
             type:String,
