@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator=require('validator');
+require("dotenv").config();
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcryptjs");
 const adminschema = new mongoose.Schema({
