@@ -9,7 +9,7 @@ const fs = require('fs');
 const path =require("path");
 const  cron= require("node-cron");
 const request=require("request");
-const fast2sms = require('fast-two-sms');
+//const fast2sms = require('fast-two-sms');
 const bodyparser=require("body-parser");
 const nodemailer=require("nodemailer");
 const multer = require('multer');
@@ -61,6 +61,7 @@ router.post("/Brands_link_account",(req,res)=>{
         Twitter_Link:req.body.Twitter_Link,
         website_Link:req.body.website_Link
     })
+    console.log(data);
     data.save().then(()=>{
         res.status(201).send(data);
     }).catch((e)=>{
