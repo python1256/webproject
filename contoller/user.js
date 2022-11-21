@@ -179,9 +179,12 @@ router.post("/users_Register",async (req,res)=>{
             httpOnly:true
         });
         //console.log(cookie);
-        const register= await user.save();
+        user.save().then(()=>{
+            res.status(201).send(user);
+        }).catch(()=>{
+            res.status(400).send(error);
+        });
         console.log("the page part" + register);
-        res.status(201).send(register);
             //just need to change send to render and mention the home page
         }
         else{
@@ -238,8 +241,13 @@ router.post("/admin_Register",async (req,res)=>{
             httpOnly:true
         });
         //console.log(cookie);
-        const register= await user.save();
-        res.status(201).send(register);
+        user.save().then(()=>{
+            res.status(201).send(user);
+
+        }).catch((error)=>{
+            res.send(400).status(error);
+        });
+        
         
     }else{
         res.status(400).send("password is not matching");
@@ -305,8 +313,12 @@ router.post("/Influencer_Register",async(req,res)=>{
             httpOnly:true
         });
         //console.log(cookie);
-        const register= await user.save();
-        res.status(201).send(register);
+        user.save().then(()=>{
+            res.status(201).send(user);
+        }).catch((error)=>{
+            res.status(400).send(error);
+        });
+        
         
     }else{
         res.status(400).send("password is not matching");
@@ -477,8 +489,12 @@ router.post("/Brands_Register",async (req,res)=>{
             httpOnly:true
         });
         //console.log(cookie);
-        const register= await user.save();
-        res.status(201).send(register);
+        user.save().then(()=>{
+            res.status(201).send(user);
+        }).catch((error)=>{
+            res.status(400).send(error)
+        });
+    
         
     }else{
         res.status(400).send("password is not matching");
