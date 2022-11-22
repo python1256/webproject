@@ -52,10 +52,8 @@ router.post("/tester_show",async(req,res)=>{
         console.log("3",instaId);
         let instausername =resp.data.filter(d => d.username);
         console.log("4",instausername);
-        let instabuisnesstype=resp.account_type;
-        console.log("5",instabuisnesstype);
         if(all=='data'){
-            res.status(201).send(instaPhotos,instaVedio,instaId,instausername,instabuisnesstype);
+            res.status(201).send(instaPhotos,instaVedio,instaId,instausername);
         }
         else{
             switch(all){
@@ -71,9 +69,7 @@ router.post("/tester_show",async(req,res)=>{
                 case 'instausername':
                     res.status(201).send(instausername);
                     break;
-                case 'instabuisnesstype':
-                    res.status(201).send(instabuisnesstype);
-                    break;
+
                 default:
                     res.status(404).send("invalid entry");
     
