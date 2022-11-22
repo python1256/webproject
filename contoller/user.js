@@ -41,29 +41,38 @@ router.post("/tester_show",async(req,res)=>{
         let instaAccessToken = req.body.accesstoken; 
         let all=req.body.reply;
         
-        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url,id,username&access_token=${instaAccessToken}`);
+        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url,id,username,account_type&access_token=${instaAccessToken}`);
         resp = resp.data;
+        console.log(resp);
         let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
         console.log(instaPhotos);
-        let instaVedio =resp.data.filter(d => d.media_type === "VEDIO").map(d => d.media_url);
+        let instaVedio =resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
         let instaId =resp.data.filter(d => d.id);
         let instausername =resp.data.filter(d => d.username);
-        switch(all){
-            case 'instaPhotos':
-                res.status(201).send(instaPhotos);
-                break;
-            case 'instaVedio':
-                res.status(201).send(instaVedio);
-                break;
-            case 'instaId':
-                res.status(201).send(instaId);
-                break;
-            case 'instausername':
-                res.status(201).send(instausername);
-                break;
-            default:
-                res.status(404).send("invalid entry");
-
+        let instabuisnesstype=resp.data.account_type;
+        if(all=='data'){
+            res.status(201).send(instaPhotos,instaVedio,instaId,instausername,instabuisnesstype);
+        }
+        else{
+            switch(all){
+                case 'instaPhotos':
+                    res.status(201).send(instaPhotos);
+                    break;
+                case 'instaVedio':
+                    res.status(201).send(instaVedio);
+                    break;
+                case 'instaId':
+                    res.status(201).send(instaId);
+                    break;
+                case 'instausername':
+                    res.status(201).send(instausername);
+                    break;
+                case 'instabuisnesstype':
+                    res.status(201).send(instabuisnesstype);
+                default:
+                    res.status(404).send("invalid entry");
+    
+            }
         }
     }catch(e) {console.log(e.response.data.error);}
 })
