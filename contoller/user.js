@@ -37,36 +37,55 @@ router.get("/get-auth-code", (req, res, next) => {
 
 //Influencer link api
 router.post("/Influencer_link_account",(req,res)=>{
-    const data=new InfluencerLink_store({
-        Instagram_link:req.body.Instagram_link,
-        Facebook_Link:req.body.Facebook_Link,
-        tiktok_Link:req.body.tiktok_Link,
-        Youtube_Link:req.body.Youtube_Link,
-        Twitter_Link:req.body.Twitter_Link,
-        website_Link:req.body.website_Link
-    })
-    data.save().then(()=>{
-        res.status(201).send(data);
-    }).catch((e)=>{
-        res.status(400).send(e);
-    })
+    try{
+        const name=req.body.username;
+        const usernam=new influncer_detail.findOne({Influencer_username:name});
+        console.log(usernam);
+        const data=new InfluencerLink_store({
+            username:req.body.username,
+            Instagram_link:req.body.Instagram_link,
+            Facebook_Link:req.body.Facebook_Link,
+            tiktok_Link:req.body.tiktok_Link,
+            Youtube_Link:req.body.Youtube_Link,
+            Twitter_Link:req.body.Twitter_Link,
+            website_Link:req.body.website_Link
+        })
+        console.log(data);
+        data.save().then(()=>{
+            res.status(201).send(data);
+        }).catch((e)=>{
+            res.status(400).send(e,"username is not registered");
+        })
+    }catch(error){
+        res.status(403),send("forbbiden to enter register");
+    }
 })
+
+
+
 //brands link api
 router.post("/Brands_link_account",(req,res)=>{
-    const data=new BrandsLink_store({
-        Instagram_link:req.body.Instagram_link,
-        Facebook_Link:req.body.Facebook_Link,
-        tiktok_Link:req.body.tiktok_Link,
-        Youtube_Link:req.body.Youtube_Link,
-        Twitter_Link:req.body.Twitter_Link,
-        website_Link:req.body.website_Link
-    })
-    console.log(data);
-    data.save().then(()=>{
-        res.status(201).send(data);
-    }).catch((e)=>{
-        res.status(400).send(e);
-    })
+    try{
+        const name=req.body.username;
+        const usernam=new Brand_detail.findOne({Brands_username:name});
+        const data=new BrandsLink_store({
+            username:req.body.username,
+            Instagram_link:req.body.Instagram_link,
+            Facebook_Link:req.body.Facebook_Link,
+            tiktok_Link:req.body.tiktok_Link,
+            Youtube_Link:req.body.Youtube_Link,
+            Twitter_Link:req.body.Twitter_Link,
+            website_Link:req.body.website_Link
+        })
+        console.log(data);
+        data.save().then(()=>{
+            res.status(201).send(data);
+        }).catch((e)=>{
+            res.status(400).send(e,"username is not registered");
+        })
+    }catch(error){
+        res.status(403),send("forbbiden to enter register");
+    }
 })
 
 //set up multer

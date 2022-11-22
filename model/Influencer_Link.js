@@ -1,6 +1,9 @@
 const mongoose=require("mongoose");
 //const validator=require('validator');
 const Linkschema = new mongoose.Schema({
+    username:{
+        type:String,
+    },
     Instagram_Link:{
         type:String,
         
