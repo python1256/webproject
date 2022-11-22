@@ -35,6 +35,8 @@ router.get("/get-auth-code", (req, res, next) => {
 //getting token
 
 
+
+
 //Influencer link api
 router.post("/Influencer_link_account",(req,res)=>{
     try{
@@ -649,6 +651,33 @@ router.get("/Get_Brands_data",async(req,res)=>{
    //         res.status(201).send("image uploaded");
      //   }
     //});
+router.get("/Brands_Link",async(req,res)=>{
+    try{
+        const  username=req.params.username;
+        const Brand_data= await BrandsLink_store.findOne({username:username});
+        if(!Brand_data){
+            return res.status(400).send("error");
+        }else{
+            res.send(Brand_data);
+        }
+    }catch(error){
+        res.status(400).send(error);
+    }
+})
+
+router.get("/Influencer_Link",async(req,res)=>{
+    try{
+        const  username=req.params.username;
+        const Brand_data= await InfluencerLink_store.findOne({username:username});
+        if(!Brand_data){
+            return res.status(400).send("error");
+        }else{
+            res.send(Brand_data);
+        }
+    }catch(error){
+        res.status(400).send(error);
+    }
+})
 
 
 module.exports = router;
