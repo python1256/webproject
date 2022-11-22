@@ -50,9 +50,9 @@ router.post("/tester_show",async(req,res)=>{
         console.log("2",instaVedio);
         let resp1 = await axios.get(`https://graph.instagram.com/me?fields=id,username,account_type&access_token=${instaAccessToken}`);
         resp1=resp1.data;
-        let instaId =resp1.data.filter(d => d.id ==="id");
+        let instaId =resp1.data.filter(d => d.id);
         console.log("3",instaId);
-        let instausername =resp1.data.filter(d => d.username === "username");
+        let instausername =resp1.data.filter(d => d.username);
         console.log("4",instausername);
         if(all=='data'){
             res.status(201).send(instaPhotos,instaVedio,instaId,instausername);
