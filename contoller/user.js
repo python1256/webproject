@@ -36,7 +36,36 @@ router.get("/get-auth-code", (req, res, next) => {
 
 
 
+router.post("/tester_show",async(req,res)=>{
+    try {
+        let instaAccessToken = process.env.ALLOW; 
+        let all=req.body.reply;
+        
+        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url,id,username&access_token=${instaAccessToken}`);
+        resp = resp.data;
+        let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
+        let instaVedio =resp.data.filter(d => d.media_type === "VEDIO").map(d => d.media_url);
+        let instaId =resp.data.filter(d => d.id);
+        let instausername =resp.data.filter(d => d.username);
+        switch(all){
+            case 'instaPhotos':
+                res.status(201).send(instaPhotos);
+                break;
+            case 'instaVedio':
+                res.status(201).send(instaVedio);
+                break;
+            case 'instaId':
+                res.status(201).send(instaId);
+                break;
+            case 'instausername':
+                res.status(201).send(instausername);
+                break;
+            default:
+                res.status(404).send("invalid entry");
 
+        }
+    }catch(e) {console.log(e.response.data.error);}
+})
 //Influencer link api
 router.post("/Influencer_link_account",(req,res)=>{
     try{
