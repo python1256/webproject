@@ -52,7 +52,7 @@ router.post("/tester_show",async(req,res)=>{
         console.log("3",instaId);
         let instausername =resp.data.filter(d => d.username);
         console.log("4",instausername);
-        let instabuisnesstype=resp.data.account_type;
+        let instabuisnesstype=resp.data.filter(d => d.account_type);
         console.log("5",instabuisnesstype);
         if(all=='data'){
             res.status(201).send(instaPhotos,instaVedio,instaId,instausername,instabuisnesstype);
