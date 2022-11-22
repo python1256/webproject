@@ -47,9 +47,13 @@ router.post("/tester_show",async(req,res)=>{
         let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
         console.log(instaPhotos);
         let instaVedio =resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
+        console.log("2",instaVedio);
         let instaId =resp.data.filter(d => d.id);
+        console.log("3",instaId);
         let instausername =resp.data.filter(d => d.username);
+        console.log("4",instausername);
         let instabuisnesstype=resp.data.account_type;
+        console.log("5",instabuisnesstype);
         if(all=='data'){
             res.status(201).send(instaPhotos,instaVedio,instaId,instausername,instabuisnesstype);
         }
@@ -69,6 +73,7 @@ router.post("/tester_show",async(req,res)=>{
                     break;
                 case 'instabuisnesstype':
                     res.status(201).send(instabuisnesstype);
+                    break;
                 default:
                     res.status(404).send("invalid entry");
     
