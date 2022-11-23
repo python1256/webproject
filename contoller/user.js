@@ -59,7 +59,7 @@ router.post("/tester_show",async(req,res)=>{
         console.log(instaPhotos);
         let instaVedio =resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
         console.log("2",instaVedio);
-        let resp1 = await axios.get(`https://graph.instagram.com/me?fields=id,username,account_type&access_token=${instaAccessToken}`);
+        let resp1 = await axios.get(`https://graph.instagram.com/me/media?fields=id,username,account_type&access_token=${instaAccessToken}`);
         resp1=resp1.data;
         let instaId =resp1.data.filter(d => d.id);
         console.log("3",instaId);
