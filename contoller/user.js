@@ -686,7 +686,7 @@ router.get("/Get_Brands_data",async(req,res)=>{
     //});
 router.get("/Brands_Link",async(req,res)=>{
     try{
-        const  username=req.params.username;
+        const  username=req.body.username;
         const Brand_data= await BrandsLink_store.findOne({username:username});
         if(!Brand_data){
             return res.status(400).send("error");
@@ -700,7 +700,7 @@ router.get("/Brands_Link",async(req,res)=>{
 
 router.get("/Influencer_Link",async(req,res)=>{
     try{
-        const  username=req.params.username;
+        const  username=req.body.username;
         const Brand_data= await InfluencerLink_store.findOne({username:username});
         if(!Brand_data){
             return res.status(400).send("error");
