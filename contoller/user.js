@@ -246,12 +246,7 @@ router.post("/users_Register",async (req,res)=>{
         });
         //saving password
        // middleware
-        const token=await user.generateAuthToken();
-        console.log(token);
-        res.cookie("jwt",token,{
-            expires:new Date(Date.now()+30000),
-            httpOnly:true
-        });
+        
         //console.log(cookie);
         user.save().then(()=>{
             res.status(201).send(user);
@@ -308,12 +303,7 @@ router.post("/admin_Register",async (req,res)=>{
             address:req.body.address,
             phone:req.body.phone
         });
-        const token=await user.generateAuthToken();
-        console.log(token);
-        res.cookie("jwt",token,{
-            expires:new Date(Date.now()+30000),
-            httpOnly:true
-        });
+        
         //console.log(cookie);
         user.save().then(()=>{
             res.status(201).send(user);
@@ -380,12 +370,7 @@ router.post("/Influencer_Register",async(req,res)=>{
             Instagram_link:req.body.Instagram_link
         });
         console.log(user);
-        const token=await user.generateAuthToken();
-        console.log(token);
-        res.cookie("jwt",token,{
-            expires:new Date(Date.now()+30000),
-            httpOnly:true
-        });
+        
         //console.log(cookie);
         user.save().then(()=>{
             res.status(201).send(user);
@@ -556,12 +541,7 @@ router.post("/Brands_Register",async (req,res)=>{
 
             }
         );
-        const token=await user.generateAuthToken();
-        console.log(token);
-        res.cookie("jwt",token,{
-            expires:new Date(Date.now()+30000),
-            httpOnly:true
-        });
+        
         //console.log(cookie);
         user.save().then(()=>{
             res.status(201).send(user);
