@@ -66,7 +66,7 @@ router.post("/tester_show",async(req,res)=>{
         let instausername =resp1.data.filter(d => d.username);
         console.log("4",instausername);
         if(all=='data'){
-            res.status(201).send(instaPhotos,instaVedio,instaId,instausername);
+            res.status(201).send({instaPhotos,instaVedio,instaId,instausername});
         }
         else{
             switch(all){
