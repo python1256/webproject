@@ -34,6 +34,17 @@ router.get("/get-auth-code", (req, res, next) => {
 });
 //getting token
 
+router.post("/tester_Lobg_term_token",async(req,res)=>{
+    try{
+        let instaAccessToken = req.body.accesstoken;
+        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTA_APP_SECRET}&access_token=${instaAccessToken}`)
+        let accessToken = resp.data.access_token;
+        res.status(201).send(accessToken);
+    }catch(error){
+        res.status(400).send(error);
+    }
+})
+
 
 
 router.post("/tester_show",async(req,res)=>{
