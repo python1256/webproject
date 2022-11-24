@@ -48,7 +48,7 @@ router.post("/update_page/:username",(req,res)=>{
             CATEGORIES:req.body.CATEGORIES,
         });
         console.log(data);
-        data.save().then((data)=>{
+        data.save().then(()=>{
             res.status.send(data);
         }).catch((error)=>{
             res.status(400).send(error);
@@ -141,7 +141,7 @@ router.post("/Influencer_link_account",(req,res)=>{
             website_Link:req.body.website_Link
         })
         console.log(data);
-        data.save().then((data)=>{
+        data.save().then(()=>{
             res.status(201).send(data);
         }).catch((e)=>{
             res.status(400).send(e,"username is not registered");
@@ -168,7 +168,7 @@ router.post("/Brands_link_account",(req,res)=>{
             website_Link:req.body.website_Link
         })
         console.log(data);
-        data.save().then((data)=>{
+        data.save().then(()=>{
             res.status(201).send(data);
         }).catch((e)=>{
             res.status(400).send(e,"username is not registered");
@@ -227,7 +227,7 @@ router.post("/upload_Image",(req,res)=>{
 
             })
             console.log(newimage);
-            newimage.save().then((newimage)=>{
+            newimage.save().then(()=>{
                 res.status(201).send("sucessfully upload");
                 //just need to change send to render and mention the home page
             }).catch((err)=>{
@@ -283,7 +283,7 @@ router.post("/users_Register",async (req,res)=>{
        // middleware
         
         //console.log(cookie);
-        user.save().then((user)=>{
+        user.save().then(()=>{
             res.status(201).send(user);
         }).catch(()=>{
             res.status(400).send(error);
@@ -340,7 +340,7 @@ router.post("/admin_Register",async (req,res)=>{
         });
         
         //console.log(cookie);
-        user.save().then((user)=>{
+        user.save().then(()=>{
             res.status(201).send(user);
 
         }).catch((error)=>{
@@ -407,7 +407,7 @@ router.post("/Influencer_Register",async(req,res)=>{
         console.log(user);
         
         //console.log(cookie);
-        user.save().then((user)=>{
+        user.save().then(()=>{
             res.status(201).send(user);
         }).catch((error)=>{
             res.status(400).send(error);
@@ -578,7 +578,7 @@ router.post("/Brands_Register",async (req,res)=>{
         );
         
         //console.log(cookie);
-        user.save().then((user)=>{
+        user.save().then(()=>{
             res.status(201).send(user);
         }).catch((error)=>{
             res.status(400).send(error)
