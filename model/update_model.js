@@ -8,7 +8,6 @@ const updatepageschema = new mongoose.Schema({
    },
    GENDER:{
     type:String,
-    required:true
    },
    CATEGORIES:{
     type:String
