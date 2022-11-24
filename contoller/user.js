@@ -43,7 +43,7 @@ router.post("/update_show",async(req,res)=>{
         console.log(data_show.email);
         const user=new update_stor({
             dob:req.body.dob,
-            date:req.body.date,
+            gender:req.body.gender,
             categories:req.body.categories
         });
         user.save().then(()=>{
