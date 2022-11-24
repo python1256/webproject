@@ -25,7 +25,7 @@ const axios=require("axios");
 const InfluencerLink_store=require("../model/Influencer_Link");
 const BrandsLink_store=require("../model/Brands_Link");
 const Image_stor=require("../model/url");
-const update=require("../model/update_model");
+const update_stor=require("../model/update_model");
 
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
@@ -40,10 +40,9 @@ router.post("/update_page/:username",(req,res)=>{
     try{
         const ap=req.params.username;
         console.log(ap);
-        const usernam=new influncer_detail.findOne({Influencer_username:req.params.username});
-        console.log(usernam);
-        const data=new update({
-            username:usernam,
+        //const usernam=new influncer_detail.findOne({Influencer_username:req.params.username});
+        //console.log(usernam);
+        const data=new update_stor({
             DOB:req.body.DOB,
             GENDER:req.body.GENDER,
             CATEGORIES:req.body.CATEGORIES,
@@ -56,7 +55,7 @@ router.post("/update_page/:username",(req,res)=>{
         });
 
     }catch(error){
-        res.status(404).send("unable to update!!!");
+        res.status(400).send("unable to update!!!");
     }
 });
 router.get("/get_data",(req,res)=>{

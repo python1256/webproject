@@ -1,8 +1,5 @@
 const mongoose=require("mongoose");
 const updatepageschema = new mongoose.Schema({
-   username:{
-      type:String,
-   },
    DOB:{
       type:String,
    },
@@ -13,6 +10,6 @@ const updatepageschema = new mongoose.Schema({
     type:String
    }
 })
-const update=new mongoose.model('update',updatepageschema);
+const update_stor =new mongoose.model('update_stor',updatepageschema);
 
-module.exports=update;
+module.exports=update_stor;
