@@ -1,4 +1,5 @@
 const mongoose=require("mongoose");
+require("./db/conn2");
 const Imageschema = new mongoose.Schema({
    name:{
       typeof:String,

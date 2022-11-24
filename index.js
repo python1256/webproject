@@ -6,6 +6,7 @@ const host='0.0.0.0';
 const nodemailer = require("nodemailer");
 const path = require("path");
 require("./db/conn");
+require("./db/conn2");
 const exphbs = require("express-handlebars");
 const bodyparser =require("body-parser");
 const cookieparser=require("cookie-parser");
