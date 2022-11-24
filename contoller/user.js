@@ -36,10 +36,8 @@ router.get("/get-auth-code", (req, res, next) => {
 
 
 //update api page
-router.post("/update_page/:username",(req,res)=>{
+router.post("/update_page",(req,res)=>{
     try{
-        const ap=req.params.username;
-        console.log(ap);
         //const usernam=new influncer_detail.findOne({Influencer_username:req.params.username});
         //console.log(usernam);
         const data=new update_stor({
@@ -51,7 +49,7 @@ router.post("/update_page/:username",(req,res)=>{
         data.save().then(()=>{
             res.status.send(data);
         }).catch((error)=>{
-            res.status(400).send(error);
+            res.send(error);
         });
 
     }catch(error){
