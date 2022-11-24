@@ -423,11 +423,11 @@ router.post("/Influencer_Register",async(req,res)=>{
 //let connection=new smtpconnection(this.options);
 let transporter=nodemailer.createTransport({
     host:'smtp.gmail.com',
-    port:465,
+    port:587,
     secure:true,
     auth:{
-        user:'bdm2.wfa',
-        pass:'qwerty@2023A',
+        user:'yashsharma.wfa@gmail.com',
+        pass:'yash88755',
     }
 });
 
@@ -443,7 +443,7 @@ router.post("/Influencer_otp_send/:email",async(req,res)=>{
         const gmailb = user_email.email;
         console.log(gmailb);
         let mailoption={
-            from:'bdm2.wfa',
+            from:'yashsharma.wfa@gmail.com',
             to:gmailb,
             subject:'otp for registration is:',
             html:`<h3>otp for account verification is</h3>${otp}`
