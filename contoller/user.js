@@ -38,6 +38,8 @@ router.get("/get-auth-code", (req, res, next) => {
 //update api page
 router.post("/update_page/:username",(req,res)=>{
     try{
+        const ap=req.params.username;
+        console.log(ap);
         const usernam=new influncer_detail.findOne({Influencer_username:req.params.username});
         console.log(usernam);
         const data=new update({
