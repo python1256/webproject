@@ -39,7 +39,7 @@ router.get("/get-auth-code", (req, res, next) => {
 router.post("/update_show",async(req,res)=>{
     try{
         const username=req.body.username;
-        const data_show=await influencer_detail.findOne({Influencer_username:username});
+        const data_show=await influncer_detail.findOne({Influencer_username:username});
         console.log(data_show.email);
         const user=new update_stor({
             dob:req.body.dob,
