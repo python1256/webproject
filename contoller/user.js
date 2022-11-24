@@ -1,13 +1,13 @@
 const influncer_detail = require("../model/Influencers_model");
 const Brand_detail = require("../model/brands_model");
-const Access_token=require("../model/Access_Token");
+//const Access_token=require("../model/Access_Token");
 const express = require("express");
 require("dotenv").config();
 const user_detail=require("../model/user_model");
 const admin_detail=require("../model/admin_model");
-const fs = require('fs');
+//const fs = require('fs');
 const path =require("path");
-const  cron= require("node-cron");
+//const  cron= require("node-cron");
 const request=require("request");
 //const fast2sms = require('fast-two-sms');
 const bodyparser=require("body-parser");
@@ -20,11 +20,12 @@ const Image_store=require("../model/image_model");
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcryptjs");
 const axios=require("axios");
-const curl=require("curl");
-const followers = require('instagram-followers');
+//const curl=require("curl");
+//const followers = require('instagram-followers');
 const InfluencerLink_store=require("../model/Influencer_Link");
 const BrandsLink_store=require("../model/Brands_Link");
 const Image_stor=require("../model/url");
+const update=require("../model/update_model");
 
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
@@ -32,6 +33,40 @@ router.get("/get-auth-code", (req, res, next) => {
       `<a href='https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=user_media,user_profile&response_type=code'> Connect to Instagram </a>`
     ); 
 });
+
+
+//update api page
+router.post("/update_page",(req,res)=>{
+    try{
+        const name=req.body.username;
+        const usernam=new influncer_detail.findOne({Influencer_username:name});
+        console.log(usernam);
+        const data=new update({
+            username:usernam,
+            DOB:req.body.DOB,
+            GENDER:req.body. GENDER,
+            CATEGORIES:req.body.CATEGORIES,
+        });
+        console.log(data);
+        data.save().then((data)=>{
+            res.status.send(data);
+        }).catch((error)=>{
+            res.status(400).send(error);
+        });
+
+    }catch(error){
+        res.status(404).send("unable to update!!!");
+    }
+});
+router.get("/get_data",(req,res)=>{
+    try{
+        const name=req.body.username;
+        const usernam=new influncer_detail.findOne({Influencer_username:name});
+        res.status(201).send(usernam);
+    }catch(error){
+        res.status(400).send("unable to fetch");
+    }
+})
 //getting token
 
 router.post("/tester_Lobg_term_token",async(req,res)=>{
@@ -106,7 +141,7 @@ router.post("/Influencer_link_account",(req,res)=>{
             website_Link:req.body.website_Link
         })
         console.log(data);
-        data.save().then(()=>{
+        data.save().then((data)=>{
             res.status(201).send(data);
         }).catch((e)=>{
             res.status(400).send(e,"username is not registered");
@@ -133,7 +168,7 @@ router.post("/Brands_link_account",(req,res)=>{
             website_Link:req.body.website_Link
         })
         console.log(data);
-        data.save().then(()=>{
+        data.save().then((data)=>{
             res.status(201).send(data);
         }).catch((e)=>{
             res.status(400).send(e,"username is not registered");
@@ -192,7 +227,7 @@ router.post("/upload_Image",(req,res)=>{
 
             })
             console.log(newimage);
-            newimage.save().then(()=>{
+            newimage.save().then((newimage)=>{
                 res.status(201).send("sucessfully upload");
                 //just need to change send to render and mention the home page
             }).catch((err)=>{
@@ -248,7 +283,7 @@ router.post("/users_Register",async (req,res)=>{
        // middleware
         
         //console.log(cookie);
-        user.save().then(()=>{
+        user.save().then((user)=>{
             res.status(201).send(user);
         }).catch(()=>{
             res.status(400).send(error);
@@ -305,7 +340,7 @@ router.post("/admin_Register",async (req,res)=>{
         });
         
         //console.log(cookie);
-        user.save().then(()=>{
+        user.save().then((user)=>{
             res.status(201).send(user);
 
         }).catch((error)=>{
@@ -372,7 +407,7 @@ router.post("/Influencer_Register",async(req,res)=>{
         console.log(user);
         
         //console.log(cookie);
-        user.save().then(()=>{
+        user.save().then((user)=>{
             res.status(201).send(user);
         }).catch((error)=>{
             res.status(400).send(error);
@@ -543,7 +578,7 @@ router.post("/Brands_Register",async (req,res)=>{
         );
         
         //console.log(cookie);
-        user.save().then(()=>{
+        user.save().then((user)=>{
             res.status(201).send(user);
         }).catch((error)=>{
             res.status(400).send(error)
