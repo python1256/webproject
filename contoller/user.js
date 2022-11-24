@@ -44,7 +44,7 @@ router.post("/update_page",(req,res)=>{
         const data=new update({
             username:usernam,
             DOB:req.body.DOB,
-            GENDER:req.body. GENDER,
+            GENDER:req.body.GENDER,
             CATEGORIES:req.body.CATEGORIES,
         });
         console.log(data);
