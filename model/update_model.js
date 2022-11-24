@@ -1,12 +1,12 @@
 const mongoose=require("mongoose");
 const updatepageschema = new mongoose.Schema({
-   DOB:{
-      type:String,
+   dob:{
+      type:Date,
    },
-   GENDER:{
+   gender:{
     type:String,
    },
-   CATEGORIES:{
+   categories:{
     type:String
    }
 })

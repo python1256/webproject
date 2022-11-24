@@ -36,26 +36,26 @@ router.get("/get-auth-code", (req, res, next) => {
 
 
 //update api page
-router.post("/update_page",(req,res)=>{
+router.post("/update_show",async(req,res)=>{
     try{
-        //const usernam=new influncer_detail.findOne({Influencer_username:req.params.username});
-        //console.log(usernam);
-        const data=new update_stor({
-            DOB:req.body.DOB,
-            GENDER:req.body.GENDER,
-            CATEGORIES:req.body.CATEGORIES,
+        const username=req.body.username;
+        const data_show=await influencer_detail.findOne({Influencer_username:username});
+        console.log(data_show.email);
+        const user=new update_stor({
+            dob:req.body.dob,
+            date:req.body.date,
+            categories:req.body.categories
         });
-        console.log(data);
-        data.save().then(()=>{
-            res.status.send(data);
+        user.save().then(()=>{
+            res.status(201).send(user);
         }).catch((error)=>{
-            res.send(error);
+            res.status(400).send(error);
         });
-
     }catch(error){
-        res.status(400).send("unable to update!!!");
-    }
-});
+        res.status(403).send("invalid!!!");
+    } 
+})
+
 router.get("/get_data",(req,res)=>{
     try{
         const name=req.body.username;
