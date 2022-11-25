@@ -1,5 +1,8 @@
 const mongoose=require("mongoose");
 const updatepageschema = new mongoose.Schema({
+   username:{
+      type:String,
+   },
    dob:{
       type:Date,
    },

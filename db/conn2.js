@@ -4,3 +4,4 @@ mongoose.connect("mongodb://influencer-db:A9lfIMFBNChXdkwfIiwfl0niqLQf3HyWRNwknu
 }).catch((err)=>{
     console.log("no connection",err);
 })
+//mongodb+srv://paru123:jaigopal123_@cluster0.trzg2kg.mongodb.net/test

@@ -42,6 +42,7 @@ router.post("/update_show",async(req,res)=>{
         const data_show=await influncer_detail.findOne({Influencer_username:username});
         console.log(data_show.email);
         const user=new update_stor({
+            username:req.body.username,
             dob:req.body.dob,
             gender:req.body.gender,
             categories:req.body.categories
@@ -56,10 +57,11 @@ router.post("/update_show",async(req,res)=>{
     } 
 })
 
-router.get("/get_data",(req,res)=>{
+router.get("/get_pagedata",(req,res)=>{
     try{
         const name=req.body.username;
-        const usernam=new influncer_detail.findOne({Influencer_username:name});
+        const usernam=new update_stor.findOne({username:name});
+
         res.status(201).send(usernam);
     }catch(error){
         res.status(400).send("unable to fetch");
