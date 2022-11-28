@@ -126,10 +126,10 @@ router.post("/tester_show",async(req,res)=>{
     }catch(e) {console.log(e.response.data.error);}
 })
 //Influencer link api
-router.post("/Influencer_link_account",(req,res)=>{
+router.post("/Influencer_link_account",async(req,res)=>{
     try{
         const name=req.body.username;
-        const usernam=new influncer_detail.findOne({Influencer_username:name});
+        const usernam=await  influncer_detail.findOne({Influencer_username:name});
         console.log(usernam);
         const data=new InfluencerLink_store({
             username:req.body.username,
@@ -154,10 +154,10 @@ router.post("/Influencer_link_account",(req,res)=>{
 
 
 //brands link api
-router.post("/Brands_link_account",(req,res)=>{
+router.post("/Brands_link_account",async(req,res)=>{
     try{
         const name=req.body.username;
-        const usernam=new Brand_detail.findOne({Brands_username:name});
+        const usernam=await Brand_detail.findOne({Brands_username:name});
         const data=new BrandsLink_store({
             username:req.body.username,
             Instagram_link:req.body.Instagram_link,

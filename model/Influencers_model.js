@@ -6,7 +6,8 @@ const bcrypt=require("bcryptjs");
 const Influencerschema= new mongoose.Schema({
     Influencer_username:{
         type:String,
-        required : true
+        required : true,
+        unique:true
     },
     Influencer_Firstname:{
         type : String,
