@@ -538,9 +538,9 @@ router.get("/Get_influencer_data/:id",async(req,res)=>{
     }
 })
 
-router.get("/Get_influencer_data_username",async(req,res)=>{
+router.get("/Get_influencer_data_username/:username",async(req,res)=>{
     try{
-        const  username=req.body.username;
+        const  username=req.params.username;
         const infuencer_data= await influncer_detail.findOne({Influencer_username:username});
         if(!infuencer_data){
             return res.status(400).send();
@@ -707,9 +707,9 @@ router.get("/Get_Brands_data/:id",async(req,res)=>{
     }
 })
 
-router.get("/Get_Brands_data_username",async(req,res)=>{
+router.get("/Get_Brands_data_username/:username",async(req,res)=>{
     try{
-        const  username=req.body.username;
+        const  username=req.params.username;
         const Brand_data= await Brand_detail.findOne({Brands_username:username});
         if(!Brand_data){
             return res.status(400).send();
