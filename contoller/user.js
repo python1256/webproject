@@ -26,7 +26,7 @@ const InfluencerLink_store=require("../model/Influencer_Link");
 const BrandsLink_store=require("../model/Brands_Link");
 const Image_stor=require("../model/url");
 const update_stor=require("../model/update_model");
-
+const auth=require("../middleware/auth");
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
     return res.send(
@@ -777,5 +777,51 @@ router.get("/Influencer_Link",async(req,res)=>{
     }
 })
 
+app.get("/logout_influencer",auth.auth,async(req,res)=>{
+    try{
+        req.user.tokens=req.user.tokens.filter((currentelement)=>{
+            return currentelement.token!=req.token
+        }); 
+        res.clearCookie("jwt");
+
+        console.log("logout succesfully!!");
+        const savep=await req.user.save();
+        res.send("logout successfully!!");
+
+    }catch(error){
+        res.status(500).send(error);
+    }
+})
+
+app.get("/logout_user",auth.auth2,async(req,res)=>{
+    try{
+        req.user.tokens=req.user.tokens.filter((currentelement)=>{
+            return currentelement.token!=req.token
+        }); 
+        res.clearCookie("jwt");
+
+        console.log("logout succesfully!!");
+        const savep=await req.user.save();
+        res.send("logout successfully!!");
+
+    }catch(error){
+        res.status(500).send(error);
+    }
+})
+app.get("/logout_admin",auth.auth3,async(req,res)=>{
+    try{
+        req.user.tokens=req.user.tokens.filter((currentelement)=>{
+            return currentelement.token!=req.token
+        }); 
+        res.clearCookie("jwt");
+
+        console.log("logout succesfully!!");
+        const savep=await req.user.save();
+        res.send("logout successfully!!");
+
+    }catch(error){
+        res.status(500).send(error);
+    }
+})
 
 module.exports = router;
