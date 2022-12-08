@@ -128,11 +128,11 @@ router.post("/tester_show",async(req,res)=>{
 //Influencer link api
 router.post("/Influencer_link_account",async(req,res)=>{
     try{
-        const name=req.body.username;
-        const usernam=await  influncer_detail.findOne({Influencer_username:name});
+        const name=req.body.email;
+        const usernam=await  influncer_detail.findOne({email:name});
         console.log(usernam);
         const data=new InfluencerLink_store({
-            username:req.body.username,
+            username:req.body.email,
             Instagram_link:req.body.Instagram_link,
             Facebook_Link:req.body.Facebook_Link,
             tiktok_Link:req.body.tiktok_Link,
@@ -156,10 +156,10 @@ router.post("/Influencer_link_account",async(req,res)=>{
 //brands link api
 router.post("/Brands_link_account",async(req,res)=>{
     try{
-        const name=req.body.username;
-        const usernam=await Brand_detail.findOne({Brands_username:name});
+        const name=req.body.email;
+        const usernam=await Brand_detail.findOne({email:name});
         const data=new BrandsLink_store({
-            username:req.body.username,
+            username:req.body.email,
             Instagram_link:req.body.Instagram_link,
             Facebook_Link:req.body.Facebook_Link,
             tiktok_Link:req.body.tiktok_Link,
@@ -538,10 +538,10 @@ router.get("/Get_influencer_data/:id",async(req,res)=>{
     }
 })
 
-router.get("/Get_influencer_data_username/:username",async(req,res)=>{
+router.get("/Get_influencer_data_username/:email",async(req,res)=>{
     try{
-        const  username=req.params.username;
-        const infuencer_data= await influncer_detail.findOne({Influencer_username:username});
+        const  username=req.params.email;
+        const infuencer_data= await influncer_detail.findOne({email:username});
         if(!infuencer_data){
             return res.status(400).send();
         }else{
@@ -707,10 +707,10 @@ router.get("/Get_Brands_data/:id",async(req,res)=>{
     }
 })
 
-router.get("/Get_Brands_data_username/:username",async(req,res)=>{
+router.get("/Get_Brands_data_username/:email",async(req,res)=>{
     try{
-        const  username=req.params.username;
-        const Brand_data= await Brand_detail.findOne({Brands_username:username});
+        const  username=req.params.email;
+        const Brand_data= await Brand_detail.findOne({email:username});
         if(!Brand_data){
             return res.status(400).send();
         }else{
@@ -751,7 +751,7 @@ router.get("/Get_Brands_data",async(req,res)=>{
     //});
 router.get("/Brands_Link",async(req,res)=>{
     try{
-        const  username=req.body.username;
+        const  username=req.body.email;
         const Brand_data= await BrandsLink_store.findOne({username:username});
         if(!Brand_data){
             return res.status(400).send("error");
@@ -765,7 +765,7 @@ router.get("/Brands_Link",async(req,res)=>{
 
 router.get("/Influencer_Link",async(req,res)=>{
     try{
-        const  username=req.body.username;
+        const  username=req.body.email;
         const Brand_data= await InfluencerLink_store.findOne({username:username});
         if(!Brand_data){
             return res.status(400).send("error");
