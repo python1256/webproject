@@ -38,11 +38,11 @@ router.get("/get-auth-code", (req, res, next) => {
 //update api page
 router.post("/update_show",async(req,res)=>{
     try{
-        const username=req.body.username;
-        const data_show=await influncer_detail.findOne({Influencer_username:username});
+        const username=req.body.email;
+        const data_show=await influncer_detail.findOne({email:username});
         console.log(data_show.email);
         const user=new update_stor({
-            username:req.body.username,
+            username:req.body.email,
             dob:req.body.dob,
             gender:req.body.gender,
             categories:req.body.categories
