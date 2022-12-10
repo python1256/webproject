@@ -86,12 +86,8 @@ router.post("/tester_show",async(req,res)=>{
     try {
         let instaAccessToken = req.body.accesstoken; 
         let all=req.body.reply;
-        
-        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url,id,username,account_type&access_token=${instaAccessToken}`).then(()=>{
-            console.log("kkk");
-        }).catch((error)=>{
-            console.log(error);
-        });
+        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url&access_token=${instaAccessToken}`);
+    
         resp = resp.data;
         console.log(resp);
         let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
