@@ -81,6 +81,13 @@ router.post("/tester_Lobg_term_token",async(req,res)=>{
 })
 
 
+router.post("/back",async(req,res)=>{
+    try{
+        res.send(req.body.accessToken);
+    }catch(error){
+        res.send(error);
+    }
+})
 
 router.post("/tester_show",async(req,res)=>{
     try {
