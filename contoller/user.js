@@ -72,7 +72,7 @@ router.get("/get_pagedata",(req,res)=>{
 router.post("/tester_Lobg_term_token",async(req,res)=>{
     try{
         let instaAccessToken = req.body.accesstoken;
-        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=60baaed485f039f64e7754a964033eb7&access_token=${instaAccessToken}`)
+        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTA_APP_SECRET}&access_token=${instaAccessToken}`)
         let accessToken = resp.data.access_token;
         res.status(201).send(accessToken);
     }catch(error){
@@ -88,14 +88,14 @@ router.post("/back",async(req,res)=>{
         res.send(error);
     }
 })
-
 router.post("/tester_show",async(req,res)=>{
     try {
         let instaAccessToken = req.body.accesstoken; 
         let all=req.body.reply;
-        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url&access_token=${instaAccessToken}`);
+        let resp = await axios.get(`https://graph.instagram.com/1286508712171984/media?fields=media_type,permalink,media_url&access_token=${instaAccessToken}`);
     
         resp = resp.data;
+        
         console.log(resp);
         let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
         console.log(instaPhotos);
