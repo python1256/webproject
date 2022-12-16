@@ -2,7 +2,7 @@ const express = require('express');
 const cors=require("cors");
 const app=express();
 const PORT = process.env.PORT || 8080;
-const host='0.0.0.0';
+
 const nodemailer = require("nodemailer");
 const path = require("path");
 require("./db/conn");
@@ -10,7 +10,6 @@ const exphbs = require("express-handlebars");
 const bodyparser =require("body-parser");
 const cookieparser=require("cookie-parser");
 const auth=require("./middleware/auth");
-
 
 app.use(cors(
     {
@@ -35,7 +34,7 @@ app.use(bodyparser.urlencoded({extended:false}));
 const routes = require("./contoller/user")
 app.use('/', routes)
 
-app.listen(PORT,host,()=>
+app.listen(PORT,()=>
 {
     console.log(`listening to port at ${PORT}`);
 })
