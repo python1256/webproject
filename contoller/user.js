@@ -72,7 +72,11 @@ router.get("/get_pagedata",(req,res)=>{
 router.post("/tester_Lobg_term_token",async(req,res)=>{
     try{
         let instaAccessToken = req.body.accesstoken;
-        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_APP_SECRET}&access_token=${instaAccessToken}`)
+        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_APP_SECRET}&access_token=${instaAccessToken}`).then(()=>{
+            res.send("done");
+        }).catch((error)=>{
+            res.send(error);
+        })
         let accessToken = resp.data.access_token;
         res.status(201).send(accessToken);
     }catch(error){
@@ -83,7 +87,8 @@ router.post("/tester_Lobg_term_token",async(req,res)=>{
 
 router.post("/back",async(req,res)=>{
     try{
-        res.send(req.body.accessToken);
+        const a=req.body.accessToken;
+        res.send(a);
     }catch(error){
         res.send(error);
     }
