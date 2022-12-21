@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 8080;
 const host='0.0.0.0';
 const nodemailer = require("nodemailer");
 const path = require("path");
-requiroe("./db/conn");
+require("./db/conn");
 const exphbs = require("express-handlebars");
 const bodyparser =require("body-parser");
 const cookieparser=require("cookie-parser");
