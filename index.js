@@ -10,14 +10,20 @@ const exphbs = require("express-handlebars");
 const bodyparser =require("body-parser");
 const cookieparser=require("cookie-parser");
 const auth=require("./middleware/auth");
+var allowedDomains = ['http://localhost:3000','https://sample-domain.tech/'];
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+app.options('*', cors()); 
 
-app.use(cors(
-    {
-        origin:"http://localhost:3000",
-        credentials:true,
-        optionsSuccessStatus:200
-    }
-));
+app.all('/*', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:8080");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE');
+    res.header("Access-Control-Allow-Headers", "X-Requested-With,     Content-Type");
+    next();
+});
 app.use('/uploads', express.static('./uploads')); 
 app.use(cookieparser());
 //app.engine('handlebars',exphbs({extname:"hbs",defaultLayout:false,layoutDir:"views/"}));

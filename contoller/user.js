@@ -32,9 +32,38 @@ router.get("/get-auth-code", (req, res, next) => {
     return res.send(
       `<a href='https://api.instagram.com/oauth/authorize?client_id=${process.env.INSTAGRAM_APP_ID}&redirect_uri=${process.env.REDIRECT_URI}&scope=user_media,user_profile&response_type=code'> Connect to Instagram </a>`
     ); 
+
 });
 
-
+router.post("/get-code",async(req,res)=>{
+    try{
+        var code=req.body.code;
+        var  redui=req.body.redirectUrl;
+        let accessToken = null;
+        try {
+            // send form based request to Instagram API
+            let result = await request.post({
+                url: 'https://api.instagram.com/oauth/access_token',
+                form: {
+                    client_id: process.env.INSTA_APP_ID,
+                    client_secret: process.env.INSTA_APP_SECRET,
+                    grant_type: 'authorization_code',
+                    redirect_uri:redui,
+                    code:code
+                }
+            });
+            res.send(result);
+            // Got access token. Parse string response to JSON
+            accessToken = JSON.parse(result).access_token;
+            res.send(accessToken);
+        } catch (e) {
+            console.log("Error=====", e);
+        }
+        res.status(201).send({code,redui});
+    }catch(error){
+        res.status(400).send(error);
+    }
+})
 //update api page
 router.post("/update_show",async(req,res)=>{
     try{
@@ -95,18 +124,15 @@ router.post("/back",async(req,res)=>{
 })
 router.post("/tester_show",async(req,res)=>{
     try {
-        let instaAccessToken =req.body.accesstoken; 
         let all=req.body.reply;
-        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url,id,username,account_type&access_token=${instaAccessToken}`);
-    
-        resp = resp.data;
+        let resp = req.body.data;
 
         console.log(resp);
         let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
         console.log(instaPhotos);
         let instaVedio =resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
         console.log("2",instaVedio);
-        let resp1 = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url,id,username&access_token=${instaAccessToken}`);
+        let resp1 = req.body.date2;
         resp1=resp1.data;
         let instaId =resp1.data.filter(d => d.id);
         console.log("3",instaId);
@@ -327,7 +353,7 @@ router.post("/user_login",async(req,res)=>{
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send(user_email.tokens);
+            res.status(201).send(token);
         }
 
     }catch(err){
@@ -385,7 +411,7 @@ router.post("/Admin_login",async(req,res)=>{
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send(user_email.tokens);
+            res.status(201).send(token);
         }
 
     }catch(err){
@@ -521,12 +547,13 @@ router.post("/Influencer_login",async(req,res)=>{
             secure:true
         });
         console.log(`this is ${req.cookies.jwt}`);
+        console.log(user_email.tokens.token);
 
         if(!ismatch){
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send("your token:"+user_email.tokens);
+            res.status(201).send("your token:"+token);
         }
 
     }catch(err){
@@ -637,7 +664,7 @@ router.post("/Brands_login",async(req,res)=>{
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send(user_email.tokens);
+            res.status(201).send(token);
         }
 
     }catch(err){
@@ -789,7 +816,7 @@ router.get("/Influencer_Link",async(req,res)=>{
     }
 })
 
-app.get("/logout_influencer",auth.auth,async(req,res)=>{
+router.get("/logout_influencer",auth.auth,async(req,res)=>{
     try{
         req.user.tokens=req.user.tokens.filter((currentelement)=>{
             return currentelement.token!=req.token
@@ -805,7 +832,7 @@ app.get("/logout_influencer",auth.auth,async(req,res)=>{
     }
 })
 
-app.get("/logout_user",auth.auth2,async(req,res)=>{
+router.get("/logout_user",auth.auth2,async(req,res)=>{
     try{
         req.user.tokens=req.user.tokens.filter((currentelement)=>{
             return currentelement.token!=req.token
@@ -820,7 +847,7 @@ app.get("/logout_user",auth.auth2,async(req,res)=>{
         res.status(500).send(error);
     }
 })
-app.get("/logout_admin",auth.auth3,async(req,res)=>{
+router.get("/logout_admin",auth.auth3,async(req,res)=>{
     try{
         req.user.tokens=req.user.tokens.filter((currentelement)=>{
             return currentelement.token!=req.token
@@ -833,6 +860,48 @@ app.get("/logout_admin",auth.auth3,async(req,res)=>{
 
     }catch(error){
         res.status(500).send(error);
+    }
+})
+router.patch("/update_admin_data/:id",async(req,res)=>{
+    try{
+        const  _id=req.params.id;
+        const Brand_data= await admin_detail.findByIdAndUpdate(_id,req.body);
+        if(!Brand_data){
+            return res.status(400).send("error");
+        }else{
+            res.send(Brand_data);
+        }
+    }
+    catch(err){
+        res.send(err);
+    }
+})
+router.patch("/update_brands_data/:id",async(req,res)=>{
+    try{
+        const  _id=req.params.id;
+        const Brand_data= await Brand_detail.findByIdAndUpdate(_id,req.body);
+        if(!Brand_data){
+            return res.status(400).send("error");
+        }else{
+            res.send(Brand_data);
+        }
+    }
+    catch(err){
+        res.send(err);
+    }
+})
+router.patch("/update_influencer_data/:id",async(req,res)=>{
+    try{
+        const  _id=req.params.id;
+        const Brand_data= await influencer_detail.findByIdAndUpdate(_id,req.body);
+        if(!Brand_data){
+            return res.status(400).send("error");
+        }else{
+            res.send(Brand_data);
+        }
+    }
+    catch(err){
+        res.send(err);
     }
 })
 

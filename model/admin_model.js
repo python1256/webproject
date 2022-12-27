@@ -15,7 +15,7 @@ const adminschema = new mongoose.Schema({
             true,"Email is mandatory"
         ],
         validate(value){
-            if(!validator.isEmail(value)){
+             if(!validator.isEmail(value)){
                 throw new Error("invalid email")
             }
         },
