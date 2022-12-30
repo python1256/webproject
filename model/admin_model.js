@@ -50,17 +50,6 @@ const adminschema = new mongoose.Schema({
 
 
 })
-adminschema.methods.generateAuthToken=async function(){
-    try{
-    const paru = await jwt.sign({ _id:this._id},process.env.SECRET_FOR_TOKEN);
-    this.tokens=this.tokens.concat({token:paru});
-    await this.save();
-    console.log(token);
-    return token;
-    }catch(error){
-        console.log(error);
-    }
-}
 
 adminschema.pre("save",async function(next){
     if(this.isModified("password")){

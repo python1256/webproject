@@ -40,7 +40,7 @@ router.get("/get-auth-code", (req, res, next) => {
 
 router.post("/get-code",async(req,res)=>{
     try{
-        const accesstoken =await axios.get("https://paruh1.onrender.com/send_token").then(()=>{
+        const accesstoken = axios.get("https://paruh1.onrender.com/send_token").then(()=>{
             res.status(201).send("done")
         }).catch((error)=>{
             res.status(401).send("error is their in third party api");
@@ -89,7 +89,7 @@ router.get("/get_pagedata",(req,res)=>{
 router.post("/tester_Lobg_term_token",async(req,res)=>{
     try{
         let instaAccessToken = req.body.accesstoken;
-        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTA_APP_SECRET}&access_token=${instaAccessToken}`).then(()=>{
+        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_APP_SECRET}&access_token=${instaAccessToken}`).then(()=>{
             res.send("done");
         }).catch((error)=>{
             res.send(error);
@@ -290,10 +290,6 @@ router.delete("/remover_Brand/:id",async(req,res)=>{
     }
 
 })
-
-
-
-
   //user login and register
 
 router.post("/users_Register",async (req,res)=>{
@@ -384,130 +380,18 @@ router.post("/admin_Register",async (req,res)=>{
    
 })
 
-
-///////////////////////////////////////////////////////////////////////////////////
-
-router.patch("/resetpassword_influencer",async(req,res)=>{
-    try{
-        const oldpassword=req.body.old;
-        const id=req.body.id;
-        const newpassword=req.body.new;
-        const cpassword=req.body.cpassword;
-        const old=await influncer_detail.findone({_id:id}).then(()=>{
-            res.send("found!")
-        }).catch((error)=>{
-            res.send("old password is incorrect!")
-        });
-        const check=bcrypt.compare(oldpassword,old.password);
-        if(!check){
-            res.send("password is incorrect!!")
-        }
-        else{
-            if(newpassword==cpassword){
-                let lt=bcrypt.hash(newpassword,10);
-                const Brand_data= await influncer_detail.findByIdAndUpdate(_id,{
-                    password:lt
-                }).then(()=>{
-                    res.status(201).send("succesfully checked")
-                }).catch((error)=>{
-                    res.status(201).send("error")
-                });
-            }
-            else{
-                res.send("passwrod not matched");
-            }
-        }
-    }catch(error){
-        res.send(error+"error occured");
-    }
-})
-
-
-
-router.patch("/resetpassword_admin",async(req,res)=>{
-    try{
-        const oldpassword=req.body.old;
-        const id=req.body.id;
-        const newpassword=req.body.new;
-        const cpassword=req.body.cpassword;
-        const old=await admin_detail.findone({_id:id}).then(()=>{
-            res.send("found!")
-        }).catch((error)=>{
-            res.send("old password is incorrect!")
-        });
-        const check=bcrypt.compare(oldpassword,old.password);
-        if(!check){
-            res.send("password is incorrect!!")
-        }
-        else{
-            if(newpassword==cpassword){
-                let lt=bcrypt.hash(newpassword,10);
-                const Brand_data= await admin_detail.findByIdAndUpdate(_id,{
-                    password:lt
-                }).then(()=>{
-                    res.status(201).send("succesfully checked")
-                }).catch((error)=>{
-                    res.status(201).send("error")
-                });
-            }
-            else{
-                res.send("passwrod not matched");
-            }
-        }
-    }catch(error){
-        res.send(error+"error occured");
-    }
-})
-
-router.patch("/resetpassword_brands",async(req,res)=>{
-    try{
-        const oldpassword=req.body.old;
-        const id=req.body.id;
-        const newpassword=req.body.new;
-        const cpassword=req.body.cpassword;
-        const old=await Brand_detail.findone({_id:id}).then(()=>{
-            res.send("found!")
-        }).catch((error)=>{
-            res.send("old password is incorrect!")
-        });
-        const check=bcrypt.compare(oldpassword,old.password);
-        if(!check){
-            res.send("password is incorrect!!")
-        }
-        else{
-            if(newpassword==cpassword){
-                let lt=bcrypt.hash(newpassword,10);
-                const Brand_data= await Brand_detail.findByIdAndUpdate(_id,{
-                    password:lt
-                }).then(()=>{
-                    res.status(201).send("succesfully checked")
-                }).catch((error)=>{
-                    res.status(201).send("error")
-                });
-            }
-            else{
-                res.send("passwrod not matched");
-            }
-        }
-    }catch(error){
-        res.send(error+"error occured");
-    }
-})
-
-
 router.post("/Admin_login",async(req,res)=>{
     try{
         const email=req.body.email;
         const password=req.body.password;
         const user_email=await admin_detail.findOne({email:email});
-        let Id = user_email._id;
         const ismatch=bcrypt.compare(password,user_email.password);
         const paru =jwt.sign({email:email}, process.env.SECRET_FOR_TOKEN);
         const ola1=new token3({
             token:paru,
-            email:email,
+            email:email
         })
-        ola1.save().then(()=>{ 
+        ola1.save().then(()=>{
             console.log("token generated");
         }).catch(()=>{
             console.log("token undefined");
@@ -517,7 +401,7 @@ router.post("/Admin_login",async(req,res)=>{
             res.status(400).send("invalid email or password credentials");
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send({paru,Id});
+            res.status(201).send(paru);
         }
 
     }catch(err){
@@ -877,18 +761,23 @@ router.get("/Get_Brands_data",async(req,res)=>{
         res.send(err);
     }
 })
-router.get("/Get_admin_data",async(req,res)=>{
-    try{
-       const Brands_data =await admin_detail.find();
-       res.send(Brands_data);
 
-    }catch(err)
-    {
-        res.send(err);
-    }
-})
-
-   
+    //var obj={
+//        name:req.body.name,
+  //      desc:req.body.desc,
+    //    img:{
+      //      data:fs.readFileSync(path.join(__dirname+'/uploads/'+req.file.filename)),
+        //    contentType:'image/png'
+      //  }
+ //   }
+   // Image_store.create(obj,(err,items)=>{
+    //    if(err){
+      //      res.status(400).send(err);
+     //   }else{
+       //     items.save();
+   //         res.status(201).send("image uploaded");
+     //   }
+    //});
 router.get("/Brands_Link",async(req,res)=>{
     try{
         const  username=req.body.email;
@@ -963,25 +852,10 @@ router.get("/logout_admin",auth.auth3,async(req,res)=>{
         res.status(500).send(error);
     }
 })
-router.put("/update_admin_data/:id",async(req,res)=>{
+router.patch("/update_admin_data/:id",async(req,res)=>{
     try{
         const  _id=req.params.id;
-        const pass=req.body.password;
-        const ala=bcrypt.hash(pass,10);
-        const Brand_data= await admin_detail.findByIdAndUpdate(_id,{
-            $set:{
-                admin_name:req.body.admin_name,
-                email:req.body.email,
-                password:ala,
-                repassword:undefined,
-                address:req.body.address,
-                phone:req.body.phone
-            }
-        }).then(()=>{
-            res.send("updated");
-        }).catch(()=>{
-            res.send("unable to update");
-        });
+        const Brand_data= await admin_detail.findByIdAndUpdate(_id,req.body);
         if(!Brand_data){
             return res.status(400).send("error");
         }else{
@@ -992,58 +866,24 @@ router.put("/update_admin_data/:id",async(req,res)=>{
         res.send(err);
     }
 })
-router.put("/update_brands_data/:id",async(req,res)=>{
+router.patch("/update_brands_data/:id",async(req,res)=>{
     try{
         const  _id=req.params.id;
-        const pass=req.body.password;
-        const ala=bcrypt.hash(pass,10);
-        const Brand_data= await Brand_detail.findByIdAndUpdate(_id,{
-            $set:{
-                Brands_name:req.body.Brands_name,
-                Brands_username:req.body.Brands_username,
-                email:req.body.email,
-                Street_Address:req.body.Street_Address,
-                city:req.body.city,
-                State:req.body.State,
-                postal_code:req.body.postal_code,
-                password:ala,
-                repassword:undefined,
-                phone:req.body.phone,
-                Instagram_link:req.body.Instagram_link
-
-            }
-        });
+        const Brand_data= await Brand_detail.findByIdAndUpdate(_id,req.body);
         if(!Brand_data){
             return res.status(400).send("error");
         }else{
-            res.status(201).send(Brand_data);
+            res.send(Brand_data);
         }
     }
     catch(err){
         res.send(err);
     }
 })
-router.put("/update_influencer_data/:id",async(req,res)=>{
+router.patch("/update_influencer_data/:id",async(req,res)=>{
     try{
         const  _id=req.params.id;
-        const pass=req.body.password;
-        const alan=bcrypt.hash(pass,10);
-        const Brand_data= await influncer_detail.findByIdAndUpdate(_id,{
-            $set:{
-                Influencer_username:req.body.Influencer_username,
-                Influencer_Firstname:req.body.Influencer_Firstname,
-                Influencer_Lastname:req.body.Influencer_Lastname,
-                email:req.body.email,
-                Street_Address:req.body.Street_Address,
-                city:req.body.city,
-                State:req.body.State,
-                postal_code:req.body.postal_code,
-                password:alan,
-                repassword:undefined,
-                phone:req.body.phone,
-                Instagram_link:req.body.Instagram_link
-            }
-        });
+        const Brand_data= await influencer_detail.findByIdAndUpdate(_id,req.body);
         if(!Brand_data){
             return res.status(400).send("error");
         }else{
