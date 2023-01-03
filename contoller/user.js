@@ -1021,30 +1021,27 @@ router.get("/logout_admin",auth.auth3,async(req,res)=>{
         res.status(500).send(error);
     }
 })
+//"$2a$10$EIf4TTyLaWKtL7jgVKcwxOs4DueBXm2Wo3WYvEPMnx9UJDN/IraJa"
 router.put("/update_admin_data/:id",async(req,res)=>{
     try{
         const  _id=req.params.id;
         const pass=req.body.password;
-        const ala=bcrypt.hash(pass,10);
+        const ala=await bcrypt.hash(pass,10);
+        const bush=ala.toString();
         const Brand_data= await admin_detail.findByIdAndUpdate(_id,{
             $set:{
                 admin_name:req.body.admin_name,
                 email:req.body.email,
-                password:ala,
-                repassword:undefined,
+                password:bush,
                 address:req.body.address,
                 phone:req.body.phone
             }
         }).then(()=>{
             res.send("updated");
-        }).catch(()=>{
+        }).catch((error)=>{
             res.send("unable to update");
         });
-        if(!Brand_data){
-            return res.status(400).send("error");
-        }else{
-            res.send(Brand_data);
-        }
+        console.log(Brand_data);
     }
     catch(err){
         res.send(err);
@@ -1070,12 +1067,12 @@ router.put("/update_brands_data/:id",async(req,res)=>{
                 Instagram_link:req.body.Instagram_link
 
             }
-        });
-        if(!Brand_data){
-            return res.status(400).send("error");
-        }else{
-            res.status(201).send(Brand_data);
-        }
+        }).then(()=>{
+            res.send("updated");
+        }).catch((error)=>{
+            res.send("unable to update");
+        });;
+        
     }
     catch(err){
         res.send(err);
@@ -1085,7 +1082,8 @@ router.put("/update_influencer_data/:id",async(req,res)=>{
     try{
         const  _id=req.params.id;
         const pass=req.body.password;
-        const alan=bcrypt.hash(pass,10);
+        const alan=await bcrypt.hash(pass,10);
+        const bush=(await alan).toString();
         const Brand_data= await influncer_detail.findByIdAndUpdate(_id,{
             $set:{
                 Influencer_username:req.body.Influencer_username,
@@ -1096,17 +1094,17 @@ router.put("/update_influencer_data/:id",async(req,res)=>{
                 city:req.body.city,
                 State:req.body.State,
                 postal_code:req.body.postal_code,
-                password:alan,
+                password:bush,
                 repassword:undefined,
                 phone:req.body.phone,
                 Instagram_link:req.body.Instagram_link
             }
-        });
-        if(!Brand_data){
-            return res.status(400).send("error");
-        }else{
-            res.send(Brand_data);
-        }
+        }).then(()=>{
+            res.send("updated");
+        }).catch((error)=>{
+            res.send("unable to update");
+        });;
+        
     }
     catch(err){
         res.send(err);
