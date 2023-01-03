@@ -411,8 +411,29 @@ router.post("/admin_Register",async (req,res)=>{
     }
    
 })
+/////////////////////////////////////
 
+//count api 
+router.get("/Get_influencers_data_count",async(req,res)=>{
+    try{
+       const influencer_data =await influncer_detail.find().count();
+       res.send(influencer_data);
 
+    }catch(err)
+    {
+        res.send(err);
+    }
+})
+router.get("/Get_Brands_data_count",async(req,res)=>{
+    try{
+       const Brands_data =await Brand_detail.find();
+       res.send(Brands_data);
+
+    }catch(err)
+    {
+        res.send(err);
+    }
+})
 ///////////////////////////////////////////////////////////////////////////////////
 
 router.patch("/update_admin/:id",async(req,res)=>{
