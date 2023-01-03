@@ -41,14 +41,6 @@ const adminschema = new mongoose.Schema({
         unique:true,
         required:true
     },
-    tokens:[{
-        token:{
-            type:String,
-            required:true
-        }
-    }]
-
-
 })
 
 adminschema.pre("save",async function(next){

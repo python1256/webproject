@@ -71,13 +71,6 @@ const Influencerschema= new mongoose.Schema({
         required:true
     },
     
-    tokens:[{
-        token:{
-            type:String,
-            required:true
-        }
-    }]
-
 })
 
 Influencerschema.pre("save",async function(next){

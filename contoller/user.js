@@ -448,27 +448,30 @@ router.patch("/update_admin/:id",async(req,res)=>{
         res.send(404).send("unable to process your process");
     }
 })
-router.patch("/resetpassword_influencer",async(req,res)=>{
+
+router.patch("/resetpassword_admin",async(req,res)=>{
     try{
         const oldpassword=req.body.old;
         const id=req.body.id;
         const newpassword=req.body.neew;
         const cpassword=req.body.cpassword;
         const old=await influncer_detail.findOne({_id:id});
-        const check=bcrypt.compare(oldpassword,old.password);
+        console.log(old);
+        const check=await bcrypt.compare(oldpassword,old.password);
         if(!check){
             res.send("password is incorrect!!")
         }
         else{
             if(newpassword==cpassword){
-                let lt=bcrypt.hash(newpassword,10);
-                const Brand_data= await influncer_detail.findByIdAndUpdate(_id,{
-                    $set:{password:lt}
-                });
-                Brand_data.then(()=>{
-                    res.status(201).send("succesfully checked")
+                let lt=await bcrypt.hash(newpassword,10);
+                console.log(lt);
+                const ll=(await lt).toString();
+                const Brand_data= await influncer_detail.findByIdAndUpdate(id,{
+                    $set:{password:ll}
+                }).then(()=>{
+                    res.status(201).send("succesfully checked");
                 }).catch((error)=>{
-                    res.status(201).send("error")
+                    res.status(400).send("error");
                 });
             }
             else{
@@ -481,7 +484,6 @@ router.patch("/resetpassword_influencer",async(req,res)=>{
 })
 
 
-
 router.patch("/resetpassword_admin",async(req,res)=>{
     try{
         const oldpassword=req.body.old;
@@ -489,17 +491,19 @@ router.patch("/resetpassword_admin",async(req,res)=>{
         const newpassword=req.body.neew;
         const cpassword=req.body.cpassword;
         const old=await admin_detail.findOne({_id:id});
-        const check=bcrypt.compare(oldpassword,old.password);
+        console.log(old);
+        const check=await bcrypt.compare(oldpassword,old.password);
         if(!check){
             res.send("password is incorrect!!")
         }
         else{
             if(newpassword==cpassword){
-                let lt=bcrypt.hash(newpassword,10);
-                const Brand_data= await admin_detail.findByIdAndUpdate(_id,{
-                    $set:{password:lt}
-                });
-                Brand_data.then(()=>{
+                let lt=await bcrypt.hash(newpassword,10);
+                console.log(lt);
+                const ll=(await lt).toString();
+                const Brand_data= await admin_detail.findByIdAndUpdate(id,{
+                    $set:{password:ll}
+                }).then(()=>{
                     res.status(201).send("succesfully checked");
                 }).catch((error)=>{
                     res.status(400).send("error");
@@ -514,28 +518,29 @@ router.patch("/resetpassword_admin",async(req,res)=>{
     }
 })
 //shdhdhddihudbwebd twygdbgiuyib3 i
-router.patch("/resetpassword_brands",async(req,res)=>{
+router.patch("/resetpassword_Brands",async(req,res)=>{
     try{
         const oldpassword=req.body.old;
         const id=req.body.id;
         const newpassword=req.body.neew;
         const cpassword=req.body.cpassword;
         const old=await Brand_detail.findOne({_id:id});
-        const check=bcrypt.compare(oldpassword,old.password);
+        console.log(old);
+        const check=await bcrypt.compare(oldpassword,old.password);
         if(!check){
             res.send("password is incorrect!!")
         }
         else{
             if(newpassword==cpassword){
-                let lt=bcrypt.hash(newpassword,10);
-                const Brand_data= await Brand_detail.findByIdAndUpdate(_id,{
-                    $set:{password:lt}
-                });
-                console.log(Brand_data);
-                Brand_data.then(()=>{
-                    res.status(201).send("succesfully checked")
+                let lt=await bcrypt.hash(newpassword,10);
+                console.log(lt);
+                const ll=(await lt).toString();
+                const Brand_data= await Brand_detail.findByIdAndUpdate(id,{
+                    $set:{password:ll}
+                }).then(()=>{
+                    res.status(201).send("succesfully checked");
                 }).catch((error)=>{
-                    res.status(201).send("error")
+                    res.status(400).send("error");
                 });
             }
             else{
