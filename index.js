@@ -10,6 +10,8 @@ const exphbs = require("express-handlebars");
 const bodyparser =require("body-parser");
 const cookieparser=require("cookie-parser");
 const auth=require("./middleware/auth");
+
+const staticpath=path.join(__dirname,'./src');
 var allowedDomains = ['http://localhost:3000','https://sample-domain.tech/'];
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -32,14 +34,18 @@ app.set('veiw engine','handlebars');
 //app.use('/image',express.static('upload/images'));
 
 //calling
-
+app.use(express.static(staticpath));
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
-const routes = require("./contoller/user")
-app.use('/', routes)
+app.get("/",(req,res)=>{
+    res.sendFile(path.join(__dirname+'/paruvedi.html'));
+});
 
+const routes = require("./contoller/user");
+const { addPath } = require('graphql/jsutils/Path');
+app.use('/', routes)
 app.listen(PORT,host,()=>
 {
     console.log(`listening to port at ${PORT}`);

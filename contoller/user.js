@@ -110,6 +110,34 @@ router.post("/back",async(req,res)=>{
         res.send(error);
     }
 })
+
+// router.post("/token_generate",(req,res)=>{
+//     let accessToken = null;
+//     try {
+//         // send form based request to Instagram API
+//         console.log("hii");
+//         let result = request.post({
+//             url: 'https://api.instagram.com/oauth/access_token',
+//             form: {
+//                 client_id: process.env.INSTA_APP_ID,
+//                 client_secret: process.env.INSTA_APP_SECRET,
+//                 grant_type: 'authorization_code',
+//                 redirect_uri: req.body.redirectUri,
+//                 code:req.body.code
+//             }
+//         });
+//         console.log(result);
+//         // Got access token. Parse string response to JSON
+//         accessToken = JSON.parse(result).access_token;
+//         console.log(accessToken);
+//         res.send(accessToken);
+//     } catch (e) {
+//         res.send("Error=====", e);
+//     }
+// })
+
+
+
 router.post("/tester_show",async(req,res)=>{
     try {
         let all=req.body.reply;
@@ -387,17 +415,25 @@ router.post("/admin_Register",async (req,res)=>{
 
 ///////////////////////////////////////////////////////////////////////////////////
 
+router.patch("/update_admin/:id",async(req,res)=>{
+    try{
+        const id=req.params.id;
+        const neww=await admin_detail.findByIdAndUpdate({_id:id},req.body).then(()=>{
+            res.status(201).send("data updated");
+        }).catch((error)=>{
+            res.status(400).send("unable to update the data");
+        })
+    }catch(error){
+        res.send(404).send("unable to process your process");
+    }
+})
 router.patch("/resetpassword_influencer",async(req,res)=>{
     try{
         const oldpassword=req.body.old;
         const id=req.body.id;
-        const newpassword=req.body.new;
+        const newpassword=req.body.neew;
         const cpassword=req.body.cpassword;
-        const old=await influncer_detail.findone({_id:id}).then(()=>{
-            res.send("found!")
-        }).catch((error)=>{
-            res.send("old password is incorrect!")
-        });
+        const old=await influncer_detail.findOne({_id:id});
         const check=bcrypt.compare(oldpassword,old.password);
         if(!check){
             res.send("password is incorrect!!")
@@ -406,8 +442,9 @@ router.patch("/resetpassword_influencer",async(req,res)=>{
             if(newpassword==cpassword){
                 let lt=bcrypt.hash(newpassword,10);
                 const Brand_data= await influncer_detail.findByIdAndUpdate(_id,{
-                    password:lt
-                }).then(()=>{
+                    $set:{password:lt}
+                });
+                Brand_data.then(()=>{
                     res.status(201).send("succesfully checked")
                 }).catch((error)=>{
                     res.status(201).send("error")
@@ -428,13 +465,9 @@ router.patch("/resetpassword_admin",async(req,res)=>{
     try{
         const oldpassword=req.body.old;
         const id=req.body.id;
-        const newpassword=req.body.new;
+        const newpassword=req.body.neew;
         const cpassword=req.body.cpassword;
-        const old=await admin_detail.findone({_id:id}).then(()=>{
-            res.send("found!")
-        }).catch((error)=>{
-            res.send("old password is incorrect!")
-        });
+        const old=await admin_detail.findOne({_id:id});
         const check=bcrypt.compare(oldpassword,old.password);
         if(!check){
             res.send("password is incorrect!!")
@@ -443,11 +476,12 @@ router.patch("/resetpassword_admin",async(req,res)=>{
             if(newpassword==cpassword){
                 let lt=bcrypt.hash(newpassword,10);
                 const Brand_data= await admin_detail.findByIdAndUpdate(_id,{
-                    password:lt
-                }).then(()=>{
-                    res.status(201).send("succesfully checked")
+                    $set:{password:lt}
+                });
+                Brand_data.then(()=>{
+                    res.status(201).send("succesfully checked");
                 }).catch((error)=>{
-                    res.status(201).send("error")
+                    res.status(400).send("error");
                 });
             }
             else{
@@ -458,18 +492,14 @@ router.patch("/resetpassword_admin",async(req,res)=>{
         res.send(error+"error occured");
     }
 })
-
+//shdhdhddihudbwebd twygdbgiuyib3 i
 router.patch("/resetpassword_brands",async(req,res)=>{
     try{
         const oldpassword=req.body.old;
         const id=req.body.id;
-        const newpassword=req.body.new;
+        const newpassword=req.body.neew;
         const cpassword=req.body.cpassword;
-        const old=await Brand_detail.findone({_id:id}).then(()=>{
-            res.send("found!")
-        }).catch((error)=>{
-            res.send("old password is incorrect!")
-        });
+        const old=await Brand_detail.findOne({_id:id});
         const check=bcrypt.compare(oldpassword,old.password);
         if(!check){
             res.send("password is incorrect!!")
@@ -478,8 +508,10 @@ router.patch("/resetpassword_brands",async(req,res)=>{
             if(newpassword==cpassword){
                 let lt=bcrypt.hash(newpassword,10);
                 const Brand_data= await Brand_detail.findByIdAndUpdate(_id,{
-                    password:lt
-                }).then(()=>{
+                    $set:{password:lt}
+                });
+                console.log(Brand_data);
+                Brand_data.then(()=>{
                     res.status(201).send("succesfully checked")
                 }).catch((error)=>{
                     res.status(201).send("error")
@@ -500,9 +532,9 @@ router.post("/Admin_login",async(req,res)=>{
         const email=req.body.email;
         const password=req.body.password;
         const user_email=await admin_detail.findOne({email:email});
-        let Id = user_email._id;
-        const ismatch=bcrypt.compare(password,user_email.password);
+        const ismatch=await bcrypt.compare(password,user_email.password);
         const paru =jwt.sign({email:email}, process.env.SECRET_FOR_TOKEN);
+        let Id = user_email._id;
         const ola1=new token3({
             token:paru,
             email:email,
@@ -513,11 +545,11 @@ router.post("/Admin_login",async(req,res)=>{
             console.log("token undefined");
         });
         
-        if(!ismatch){
-            res.status(400).send("invalid email or password credentials");
+        if(ismatch){
+            res.status(201).send({paru,Id});
             //just need to change send to render and then the page in doble quates for routes
         }else{
-            res.status(201).send({paru,Id});
+            res.status(400).send("bad request");
         }
 
     }catch(err){
@@ -644,7 +676,7 @@ router.post("/Influencer_login",async(req,res)=>{
         const email=req.body.email;
         const password=req.body.password;
         const user_email=await influncer_detail.findOne({email:email});
-        const ismatch=bcrypt.compare(password,user_email.password);
+        const ismatch=await bcrypt.compare(password,user_email.password);
         const paru =jwt.sign({email:email}, process.env.SECRET_FOR_TOKEN);
         const ola1=new token1({
             token:paru,
