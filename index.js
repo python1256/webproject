@@ -10,6 +10,7 @@ const exphbs = require("express-handlebars");
 const bodyparser =require("body-parser");
 const cookieparser=require("cookie-parser");
 const auth=require("./middleware/auth");
+const fileupload=require("express-fileupload");
 
 const staticpath=path.join(__dirname,'./src');
 var allowedDomains = ['http://localhost:3000','https://sample-domain.tech/'];
@@ -27,6 +28,9 @@ app.all('/*', function (req, res, next) {
     next();
 });
 app.use('/uploads', express.static('./uploads')); 
+app.use(fileupload({
+    useTempFiles:true
+}));
 app.use(cookieparser());
 //app.engine('handlebars',exphbs({extname:"hbs",defaultLayout:false,layoutDir:"views/"}));
 app.set('veiw engine','handlebars');

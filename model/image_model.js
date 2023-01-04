@@ -3,9 +3,11 @@ const Imageschema = new mongoose.Schema({
    name:{
       typeof:String,
    },
-   image:{
-    data:Buffer,
-    contentType:String
+   image_url:{
+    type:String,
+   },
+   username:{
+      type:String
    }
 })
 const Image_store=new mongoose.model('Image_store',Imageschema);

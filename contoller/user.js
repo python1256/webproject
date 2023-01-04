@@ -30,6 +30,17 @@ const BrandsLink_store=require("../model/Brands_Link");
 const Image_stor=require("../model/url");
 const update_stor=require("../model/update_model");
 const auth=require("../middleware/auth");
+const cloudinary=require("cloudinary").v2;
+
+
+cloudinary.config({ 
+  cloud_name: 'dmvthpfdq', 
+  api_key: '592522519816742', 
+  api_secret: 'ZWtqufgbXj7urvOxeoZgTPzwumo' 
+});
+
+
+
 
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
@@ -86,7 +97,7 @@ router.get("/get_pagedata",(req,res)=>{
 })
 //getting token
 
-router.post("/tester_Lobg_term_token",async(req,res)=>{
+router.post("/tester_Long_term_token",async(req,res)=>{
     try{
         let instaAccessToken = req.body.accesstoken;
         let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTA_APP_SECRET}&access_token=${instaAccessToken}`).then(()=>{
@@ -233,28 +244,28 @@ router.post("/Brands_link_account",async(req,res)=>{
 })
 
 //set up multer
-const Storage=multer.diskStorage({
-    destination:function(req,file,cb){cb(null,'./uploads');},
-    filename:(req,file,cb)=>{
-       cb(null,file.originalname);
-    },
-});
+//const Storage=multer.diskStorage({
+  //  destination:function(req,file,cb){cb(null,'./uploads');},
+    //filename:(req,file,cb)=>{
+      // cb(null,file.originalname);
+    //},
+//});
 
-const upload=multer({
-    storage:Storage,
-}).single('testimage');
+//const upload=multer({
+//    storage:Storage,
+//}).single('testimage');
 
-router.get('/show_image',(req,res)=>{
-    Image_store.find({},(err,Items)=>{
-        if(err){
-            console.log(err);
-            res.status(400).send('an error');
-        }else{
-            res.send({Items:Items});
-        }
-    });
-})
-router.get("/show_by_id/:id",async(req,res)=>{
+//router.get('/show_image',(req,res)=>{
+//    Image_store.find({},(err,Items)=>{
+//        if(err){
+//            console.log(err);
+//            res.status(400).send('an error');
+//        }else{
+//////            res.send({Items:Items});
+//        }
+//    });
+//})
+router.get("/show_by_id_admin/:id",async(req,res)=>{
     try{
         const Id=req.params.id;
         console.log(Id);
@@ -264,31 +275,35 @@ router.get("/show_by_id/:id",async(req,res)=>{
         res.status(400).send(err);
     }
 })
+router.get("/show_by_username/:username",async(req,res)=>{
+    try{
+        const Id=req.params.username;
+        console.log(Id);
+        const foundimage=await Image_store.findOne({username:Id});
+        res.status(201).send(foundimage);
+    } catch(err){
+        res.status(400).send(err);
+    }
+})
 
-router.post("/upload_Image",(req,res)=>{
-    console.log("hello");
-    upload(req,res,(err)=>{
-        if(err){
-            console.log(err,"error");
-        }
-        else{
-            const newimage=new Image_store({
+
+router.post("/upload_Image_By_user",(req,res,next)=>{
+    try{
+        const file=req.files.photo;
+        cloudinary.uploader.upload(file.tempFilePath,(err,result)=>{
+            console.log(result);
+            const image=new Image_store({
                 name:req.body.name,
-                image:{
-                    data:req.file.filename,
-                    contentType:'image/png'
-                } 
-
-            })
-            console.log(newimage);
-            newimage.save().then(()=>{
-                res.status(201).send("sucessfully upload");
-                //just need to change send to render and mention the home page
-            }).catch((err)=>{
-            res.status(400).send(err);
-            })
-        }
-    })
+                image_url:result.url,
+                username:req.body.username
+            });
+            image.save().then(()=>{
+                res.status(201).send(image);
+            }).catch((error)=>{
+                res.send(error);
+            });
+        })
+    }catch(error){res.status(404).send(error);}          
 });
 ///delete influencer
 router.delete("/remover_influencer/:id",async(req,res)=>{
