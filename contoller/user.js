@@ -42,6 +42,7 @@ cloudinary.config({
 
 
 
+
 //redirecting the auth code
 router.get("/get-auth-code", (req, res, next) => {
     return res.send(
@@ -89,8 +90,9 @@ router.get("/get_pagedata",(req,res)=>{
     try{
         const name=req.body.username;
         const usernam=new update_stor.findOne({username:name});
+        const photo=new Image_store.findOne({username:name});
 
-        res.status(201).send(usernam);
+        res.status(201).send({usernam,photo});
     }catch(error){
         res.status(400).send("unable to fetch");
     }
@@ -122,30 +124,31 @@ router.post("/back",async(req,res)=>{
     }
 })
 
-// router.post("/token_generate",(req,res)=>{
-//     let accessToken = null;
-//     try {
-//         // send form based request to Instagram API
-//         console.log("hii");
-//         let result = request.post({
-//             url: 'https://api.instagram.com/oauth/access_token',
-//             form: {
-//                 client_id: process.env.INSTA_APP_ID,
-//                 client_secret: process.env.INSTA_APP_SECRET,
-//                 grant_type: 'authorization_code',
-//                 redirect_uri: req.body.redirectUri,
-//                 code:req.body.code
-//             }
-//         });
-//         console.log(result);
-//         // Got access token. Parse string response to JSON
-//         accessToken = JSON.parse(result).access_token;
-//         console.log(accessToken);
-//         res.send(accessToken);
-//     } catch (e) {
-//         res.send("Error=====", e);
-//     }
-// })
+router.post("/token_generate",(req,res)=>{
+    let accessToken = null;
+    try {
+        // send form based request to Instagram API
+        console.log("hii");
+        let result = request.post({
+            url: 'https://api.instagram.com/oauth/access_token',
+            form: {
+                client_id: process.env.INSTA_APP_ID,
+                client_secret: process.env.INSTA_APP_SECRET,
+                grant_type: 'authorization_code',
+                redirect_uri: req.body.redirectUri,
+                code:req.body.code
+            }
+        });
+        console.log(result.accesstoken);
+        res.send(result.data);
+        // Got access token. Parse string response to JSON
+        //accessToken = JSON.parse(result).access_token;
+        //console.log(accessToken);
+        //res.send(accessToken);
+    } catch (e) {
+        res.send("Error=====", e);
+    }
+})
 
 
 
@@ -290,6 +293,7 @@ router.get("/show_by_username/:username",async(req,res)=>{
 router.post("/upload_Image_By_user",(req,res,next)=>{
     try{
         const file=req.files.photo;
+        console.log(file);
         cloudinary.uploader.upload(file.tempFilePath,(err,result)=>{
             console.log(result);
             const image=new Image_store({
@@ -464,7 +468,7 @@ router.patch("/update_admin/:id",async(req,res)=>{
     }
 })
 
-router.patch("/resetpassword_admin",async(req,res)=>{
+router.patch("/resetpassword_influencer",async(req,res)=>{
     try{
         const oldpassword=req.body.old;
         const id=req.body.id;
