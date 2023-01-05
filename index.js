@@ -37,6 +37,40 @@ app.set('veiw engine','handlebars');
 
 //app.use('/image',express.static('upload/images'));
 
+
+
+//INSTAGRAM CODE FOR TOKEN AND CODE GENERATION
+var api = require('instagram-node').instagram();
+api.use({
+  client_id: process.env.INSTA_APP_ID,
+  client_secret: process.env.INSTA_APP_SECRET
+});
+
+var redirect_uri = 'https://sample-domain.tech/';
+
+authorize_user = function(req, res) {
+  res.redirect(api.get_authorization_url(redirect_uri, { scope: ['user_media','user_profile'], state: 'a state' }));
+};
+
+handleauth = function(req, res) {
+  api.authorize_user(req.query.code, redirect_uri, function(err, result) {
+    if (err) {
+      console.log(err.body);
+      res.status(400).send("Didn't work");
+    } else {
+      console.log('Yay! Access token is ' + result.access_token);
+      const token=result.access_token;
+      res.status(201).send(token);
+    }
+  });
+};
+
+// This is where you would initially send users to authorize
+app.get('/authorize_user',authorize_user);
+// This is your redirect URI
+app.post('/handleauth',handleauth);
+
+
 //calling
 app.use(express.static(staticpath));
 app.use(express.json());

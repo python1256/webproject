@@ -11,6 +11,9 @@ const updatepageschema = new mongoose.Schema({
    },
    categories:{
     type:String
+   },
+   image:{
+      type:String
    }
 })
 const update_stor =new mongoose.model('update_stor',updatepageschema);

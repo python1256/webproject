@@ -74,7 +74,8 @@ router.post("/update_show",async(req,res)=>{
             username:req.body.email,
             dob:req.body.dob,
             gender:req.body.gender,
-            categories:req.body.categories
+            categories:req.body.categories,
+            image:req.body.image
         });
         user.save().then(()=>{
             res.status(201).send(user);
@@ -90,23 +91,19 @@ router.get("/get_pagedata",(req,res)=>{
     try{
         const name=req.body.username;
         const usernam=new update_stor.findOne({username:name});
-        const photo=new Image_store.findOne({username:name});
+        // const photo=new Image_store.findOne({username:name});
 
         res.status(201).send({usernam,photo});
     }catch(error){
         res.status(400).send("unable to fetch");
     }
 })
-//getting token
+//getting long token and refersh token
 
 router.post("/tester_Long_term_token",async(req,res)=>{
     try{
         let instaAccessToken = req.body.accesstoken;
-        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTA_APP_SECRET}&access_token=${instaAccessToken}`).then(()=>{
-            res.send("done");
-        }).catch((error)=>{
-            res.send(error);
-        })
+        let resp = await axios.get(`https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTA_APP_SECRET}&access_token=${instaAccessToken}`)
         let accessToken = resp.data.access_token;
         res.status(201).send(accessToken);
     }catch(error){
@@ -114,6 +111,19 @@ router.post("/tester_Long_term_token",async(req,res)=>{
     }
 })
 
+router.post("/referesh_token",async(req,res)=>{
+    try {
+        let oldAccessToken = req.body.accesstoken; // get from DB
+        let resp = await axios.get(`https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=${oldAccessToken}`)
+        if (resp.data.access_token) {
+            let newAccessToken = resp.data.access_token;
+            // save newAccessToken to DB
+            res.status(201).send(newAccessToken);
+        }
+    } catch (e) {
+        console.log("Error=====", e.response.data);
+    }
+})
 
 router.post("/back",async(req,res)=>{
     try{
@@ -124,75 +134,90 @@ router.post("/back",async(req,res)=>{
     }
 })
 
-router.post("/token_generate",(req,res)=>{
-    let accessToken = null;
-    try {
-        // send form based request to Instagram API
-        console.log("hii");
-        let result = request.post({
-            url: 'https://api.instagram.com/oauth/access_token',
-            form: {
-                client_id: process.env.INSTA_APP_ID,
-                client_secret: process.env.INSTA_APP_SECRET,
-                grant_type: 'authorization_code',
-                redirect_uri: req.body.redirectUri,
-                code:req.body.code
-            }
-        });
-        console.log(result.accesstoken);
-        res.send(result.data);
-        // Got access token. Parse string response to JSON
-        //accessToken = JSON.parse(result).access_token;
-        //console.log(accessToken);
-        //res.send(accessToken);
-    } catch (e) {
-        res.send("Error=====", e);
-    }
-})
 
 
+// router.post("/token_generate",(req,res)=>{
+//     let accessToken = null;
+//     try {
+//         // send form based request to Instagram API
+//         console.log("hii");
+//         let result = request.post({
+//             url: 'https://api.instagram.com/oauth/access_token',
+//             form: {
+//                 client_id: process.env.INSTA_APP_ID,
+//                 client_secret: process.env.INSTA_APP_SECRET,
+//                 grant_type: 'authorization_code',
+//                 redirect_uri: req.body.redirectUri,
+//                 code:req.body.code
+//             }
+//         });
+//         console.log(result);
+//         // Got access token. Parse string response to JSON
+//         //accessToken = JSON.parse(result).access_token;
+//         console.log(accessToken);
+//         res.status(201).send(result.data);
+//     } catch (e) {
+//         res.status(400).send("Error=====", e);
+//     }
+// })
+
+//generating data from instagram
 
 router.post("/tester_show",async(req,res)=>{
     try {
-        let all=req.body.reply;
-        let resp = req.body.data;
-
+        let instaAccessToken = req.body.accesstoken; // get from DB
+        let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_url&access_token=${instaAccessToken}`);
+        resp = resp.data;
         console.log(resp);
-        let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
-        console.log(instaPhotos);
-        let instaVedio =resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
-        console.log("2",instaVedio);
-        let resp1 = req.body.date2;
-        resp1=resp1.data;
-        let instaId =resp1.data.filter(d => d.id);
-        console.log("3",instaId);
-        let instausername =resp1.data.filter(d => d.username);
-        console.log("4",instausername);
-        if(all=='data'){
-            res.status(201).send({instaPhotos,instaVedio,instaId,instausername});
-        }
-        else{
-            switch(all){
-                case 'instaPhotos':
-                    res.status(201).send(instaPhotos);
-                    break;
-                case 'instaVedio':
-                    res.status(201).send(instaVedio);
-                    break;
-                case 'instaId':
-                    res.status(201).send(instaId);
-                    break;
-                case 'instausername':
-                    res.status(201).send(instausername);
-                    break;
-
-                default:
-                    res.status(404).send("invalid entry");
-    
-            }
-        }
-    }catch(e) {console.log(e.response.data.error);}
+        //let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
+        // Got insta photos
+        res.status(201).send(resp)
+    } catch (e) {
+        console.log(e);
+        res.status(400).send(e);
+    }
 })
+//         let all=req.body.reply;
+//         let instaAccessToken=req.body.accesstoken;
+//         let resp = await axios.get(`https://graph.instagram.com/me/media?fields=media_type,permalink,media_url&access_token=${instaAccessToken}`);
+//         console.log(resp);
+//         let instaPhotos = resp.data.filter(d => d.media_type === "IMAGE").map(d => d.media_url);
+//         console.log(instaPhotos);
+//         let instaVedio =resp.data.filter(d => d.media_type === "VIDEO").map(d => d.media_url);
+//         console.log("2",instaVedio);
+//         let resp1 = req.body.date2;
+//         resp1=resp1.data;
+//         let instaId =resp1.data.filter(d => d.id);
+//         console.log("3",instaId);
+//         let instausername =resp1.data.filter(d => d.username);
+//         console.log("4",instausername);
+//         if(all=='data'){
+//             res.status(201).send({instaPhotos,instaVedio,instaId,instausername});
+//         }
+//         else{
+//             switch(all){
+//                 case 'instaPhotos':
+//                     res.status(201).send(instaPhotos);
+//                     break;
+//                 case 'instaVedio':
+//                     res.status(201).send(instaVedio);
+//                     break;
+//                 case 'instaId':
+//                     res.status(201).send(instaId);
+//                     break;
+//                 case 'instausername':
+//                    // res.status(201).send(instausername);
+//                     break;
+
+//                 default:
+//                     res.status(400).send("invalid entry");
+    
+//             }
+//     //    }
+//  //   }catch(e) {console.log(e);}
+// })
+
+
 //Influencer link api
 router.post("/Influencer_link_account",async(req,res)=>{
     try{
@@ -307,8 +332,36 @@ router.post("/upload_Image_By_user",(req,res,next)=>{
                 res.send(error);
             });
         })
-    }catch(error){res.status(404).send(error);}          
+    }catch(error){res.status(400).send(error);}          
 });
+
+//delete image
+router.delete("/delete_Image",(req,res)=>{
+    try{
+        const id=req.query.username;
+        const url=req.query.url;
+        const imageurl=url.split('/');
+        console.log(imageurl);
+        const image=imageurl[imageurl.length-1];
+        const name=image.split('.');
+        console.log(name);
+        Image_store.remove({username:id}).then(result=>{
+            cloudinary.uploader.destroy(name,(error,result)=>{
+                console.log(error,result)
+            })
+            res.status(201).json({
+                message:result
+            });
+        }).catch((err)=>{
+            res.status(400).json({
+                error:err
+            });
+        });
+
+    }catch(error){
+        res.send(403).send("ERROR",error);
+    }
+})
 ///delete influencer
 router.delete("/remover_influencer/:id",async(req,res)=>{
     try{
@@ -435,8 +488,10 @@ router.post("/admin_Register",async (req,res)=>{
 //count api 
 router.get("/Get_influencers_data_count",async(req,res)=>{
     try{
-       const influencer_data =await influncer_detail.find().count();
-       res.send(influencer_data);
+       const influencer_data =await influncer_detail.find();
+       const ll=influencer_data.length.toString();
+       console.log(ll);
+       res.status(201).send(ll);
 
     }catch(err)
     {
@@ -446,7 +501,9 @@ router.get("/Get_influencers_data_count",async(req,res)=>{
 router.get("/Get_Brands_data_count",async(req,res)=>{
     try{
        const Brands_data =await Brand_detail.find();
-       res.send(Brands_data);
+       const ll=Brand_detail.length.toString();
+       console.log(ll);
+       res.status(201).send(ll);
 
     }catch(err)
     {
